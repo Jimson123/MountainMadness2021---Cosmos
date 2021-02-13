@@ -22,6 +22,8 @@ public class game extends AppCompatActivity {
     private final Handler handler = new Handler();
     private final Handler obstacleHandler = new Handler();
     private int r = 1;
+    private int displayX = 1080;
+    private int displayY = 1920;
     private long currentTime;
     private double newX;
     private double newY;
@@ -78,13 +80,13 @@ public class game extends AppCompatActivity {
         DisplayMetrics display = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(display);
 
-        int maxX = (int) display.widthPixels;
-        int maxY = (int) display.heightPixels;
+        displayX = (int) display.widthPixels;
+        displayY = (int) display.heightPixels;
         ImageView spaceshipIcon = findViewById(R.id.spaceship);
-        Log.i("x", "" + maxX);
-        Log.i("Y", "" + maxY);
-        double spaceshipX = maxX/2 - 50;
-        double spaceshipY = maxY - 300;
+        Log.i("x", "" + displayX);
+        Log.i("Y", "" + displayY);
+        double spaceshipX = displayX/2 - 50;
+        double spaceshipY = displayY - 300;
         Log.i("spaceship x", ""+ spaceshipX);
         Log.i("spaceship Y", ""+ spaceshipY);
         spaceship = new Spaceship(spaceshipX,spaceshipY);
@@ -92,7 +94,7 @@ public class game extends AppCompatActivity {
         Spaceship spaceship = new Spaceship(spaceshipX,spaceshipY);
         setSpaceshipLocation(spaceship.getX(), spaceship.getY());
         gameLayout = findViewById(R.id.game);
-        setGoal(maxX/2, 200);
+        setGoal(displayX/2, 200);
         handler.postDelayed(rotate,100);
         obstacleHandler.post(handleObstacles);
         setGameClick();
@@ -135,10 +137,12 @@ public class game extends AppCompatActivity {
     private void handleObstaclePositions() {
         ImageView asteroidIcon = findViewById(R.id.asteroid);
         ImageView satelliteIcon = findViewById(R.id.satellite);
-        asteroidIcon.setX((float) (150 + 450 * Math.sin(Math.toRadians(1 * (System.currentTimeMillis() % 12000)))));
-        asteroidIcon.setY(275);
-        satelliteIcon.setX((float) (150 + 450 * Math.sin(Math.toRadians(1 * (System.currentTimeMillis() % 7000)))));
-        satelliteIcon.setY(425);
+        double asteroidPhase = Math.toRadians(System.currentTimeMillis() / (3.6 * 6.283185307));
+        asteroidIcon.setX((float) (displayX/2 - 100 + (displayX/3) * Math.sin(asteroidPhase)));
+        asteroidIcon.setY((float) (displayY * 0.35));
+        double satellitePhase = Math.toRadians(System.currentTimeMillis() / (2.1 * 6.283185307));
+        satelliteIcon.setX((float) (displayX/2 - 100 + (displayX/3) * Math.sin(satellitePhase)));
+        satelliteIcon.setY((float) (displayY * 0.6));
     }
 
     private void step(long stepTime) {
