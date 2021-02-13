@@ -4,13 +4,17 @@ public class Spaceship {
     private double x;
     private double y;
     private double angle;
-    private double velocity;
+    private double spaceshipForwardVel;
+    private double spaceshipVelX;
+    private double spaceshipVelY;
 
     public Spaceship(double x, double y) {
         this.x = x;
         this.y = y;
         this.angle = 0;
-        this.velocity = 10;
+        this.spaceshipForwardVel = 0;
+        this.spaceshipVelX = 0;
+        this.spaceshipVelY = 0;
     }
 
     public double getX() {
@@ -37,11 +41,31 @@ public class Spaceship {
         this.angle = angle;
     }
 
-    public double getVelocity() {
-        return velocity;
+    public double getSpaceshipForwardVel() {
+        return spaceshipForwardVel;
     }
 
-    public void setVelocity(double velocity) {
-        this.velocity = velocity;
+    public void setSpaceshipForwardVel(double spaceshipForwardVel) {
+        this.spaceshipForwardVel = spaceshipForwardVel;
+    }
+
+    public double getSpaceshipVelX() {
+        return spaceshipVelX;
+    }
+
+    public void setSpaceshipVelX(double spaceshipVelX) {
+        this.spaceshipVelX = spaceshipVelX;
+    }
+
+    public double getSpaceshipVelY() {
+        return spaceshipVelY;
+    }
+
+    public void setSpaceshipVelY(double spaceshipVelY) {
+        this.spaceshipVelY = spaceshipVelY;
+    }
+
+    public void updateAngle(int r) {
+        this.angle += r;
     }
 }

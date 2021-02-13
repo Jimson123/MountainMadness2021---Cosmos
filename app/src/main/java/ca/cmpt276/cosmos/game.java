@@ -48,6 +48,14 @@ public class game extends AppCompatActivity {
         }
     };
 
+    private final Runnable rotate = new Runnable() {
+        @Override
+        public void run() {
+            setSpaceshipRotation(1);
+            handler.postDelayed(rotate,100);
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,12 +74,11 @@ public class game extends AppCompatActivity {
         Log.i("spaceship x", ""+ spaceshipX);
         Log.i("spaceship Y", ""+ spaceshipY);
         spaceship = new Spaceship(spaceshipX,spaceshipY);
-        double spaceshipForwardVel = 0;
-        double spaceshipVelX = 0;
-        double spaceshipVelY = 0;
+
         Spaceship spaceship = new Spaceship(spaceshipX,spaceshipY);
         setSpaceshipLocation(spaceship.getX(), spaceship.getY());
         setGoal(maxX/2, 200);
+        handler.postDelayed(rotate,100);
         setGameClick();
     }
 
@@ -81,9 +88,11 @@ public class game extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                newX = spaceship.getVelocity() * sin(spaceship.getAngle());
-                newY = spaceship.getVelocity() * cos(spaceship.getAngle());
-                handler.post(thrust);
+//                newX = spaceship.getVelocity() * sin(spaceship.getAngle());
+//                newY = spaceship.getVelocity() * cos(spaceship.getAngle());
+//                handler.post(thrust);
+                setSpaceshipRotation(10);
+                Log.i("Rotation", "" + spaceship.getAngle());
             }
         });
     }
@@ -102,20 +111,20 @@ public class game extends AppCompatActivity {
 
     private void setSpaceshipRotation(int r) {
         ImageView spaceshipIcon = findViewById(R.id.spaceship);
-        spaceshipIcon.setRotation(r);
+        spaceship.updateAngle(r);
+        spaceshipIcon.setRotation((float) spaceship.getAngle());
     }
 
     // TODO: consider whether it would be better to use polar coordinates (angle from planet, radius) instead of cartesian coordinates
-    // as you can see, this is absolutely broken
     private void step(double stepTime) {
         ImageView spaceshipIcon = findViewById(R.id.spaceship);
         double x = spaceshipIcon.getX();
         double y = spaceshipIcon.getY();
         double r = spaceshipIcon.getRotation();
-        spaceshipVelX = spaceshipForwardVel * Math.sin(Math.toRadians(r));
-        spaceshipVelY = spaceshipForwardVel * Math.cos(Math.toRadians(r));
-        double newX = x + (spaceshipVelX * stepTime);
-        double newY = y + (spaceshipVelY * stepTime);
+        spaceship.setSpaceshipVelX(spaceship.getSpaceshipForwardVel() * Math.sin(Math.toRadians(r)));
+        spaceship.setSpaceshipVelY(spaceship.getSpaceshipVelY() * Math.cos(Math.toRadians(r)));
+        double newX = x + (spaceship.getSpaceshipVelX() * stepTime);
+        double newY = y + (spaceship.getSpaceshipVelY() * stepTime);
         setSpaceshipLocation((int) newX, (int) newY);
         double newR = Math.atan2(newY, newX) + 1.570796327;
         setSpaceshipRotation((int) newR);
