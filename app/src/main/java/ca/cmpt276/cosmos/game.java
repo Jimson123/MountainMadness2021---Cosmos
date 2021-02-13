@@ -39,8 +39,14 @@ public class game extends AppCompatActivity {
                 //long timepassed = System.currentTimeMillis() - currentTime;
                 step(10);
                 //Log.i("time: ", "" + timepassed);
+                spaceship.incrementForwardVelocity(1);
                 handler.postDelayed(thrust, 10);
             }
+            else if (spaceship.getSpaceshipForwardVel() > 0){
+                spaceship.incrementForwardVelocity(-1);
+                handler.postDelayed(thrust, 10);
+            }
+
         }
     };
 
@@ -49,8 +55,8 @@ public class game extends AppCompatActivity {
         public void run() {
             if (!gameLayout.isPressed()){
                 setSpaceshipRotation(r);
+                handler.postDelayed(rotate,100);
             }
-            handler.postDelayed(rotate,100);
         }
     };
 

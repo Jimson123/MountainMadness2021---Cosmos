@@ -12,7 +12,7 @@ public class Spaceship {
         this.x = x;
         this.y = y;
         this.angle = 0;
-        this.spaceshipForwardVel = 10;
+        this.spaceshipForwardVel = 0;
         this.spaceshipVelX = 0;
         this.spaceshipVelY = 0;
     }
@@ -67,5 +67,9 @@ public class Spaceship {
 
     public void updateAngle(int r) {
         this.angle += r;
+    }
+
+    public void incrementForwardVelocity(int increment) {
+        this.spaceshipForwardVel = spaceshipForwardVel + increment;
     }
 }
