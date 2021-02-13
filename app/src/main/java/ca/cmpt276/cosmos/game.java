@@ -127,9 +127,9 @@ public class game extends AppCompatActivity {
     private void handleObstaclePositions() {
         ImageView asteroidIcon = findViewById(R.id.asteroid);
         ImageView satelliteIcon = findViewById(R.id.satellite);
-        asteroidIcon.setX((float) (50 + 250 * Math.sin(Math.toRadians(360 * (currentTime % 12000)))));
+        asteroidIcon.setX((float) (150 + 100 * Math.sin(Math.toRadians(360 * ((currentTime % 12000) / 12000)))));
         asteroidIcon.setY(275);
-        satelliteIcon.setX((float) (50 + 250 * Math.sin(Math.toRadians(360 * (currentTime % 7000)))));
+        satelliteIcon.setX((float) (150 + 100 * Math.sin(Math.toRadians(360 * ((currentTime % 7000) / 7000)))));
         satelliteIcon.setY(425);
     }
 
