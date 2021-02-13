@@ -23,9 +23,12 @@ import static java.lang.Math.sin;
 public class game extends AppCompatActivity {
 
     private Spaceship spaceship;
+    private ConstraintLayout gameLayout;
     private final Handler handler = new Handler();
+    private int r = 1;
     private double newX;
     private double newY;
+    private boolean touching;
 
     public static Intent launchIntent(Context context) {
         Intent intent = new Intent(context, game.class);
@@ -51,7 +54,9 @@ public class game extends AppCompatActivity {
     private final Runnable rotate = new Runnable() {
         @Override
         public void run() {
-            setSpaceshipRotation(1);
+            if (!gameLayout.isPressed()){
+                setSpaceshipRotation(r);
+            }
             handler.postDelayed(rotate,100);
         }
     };
@@ -77,13 +82,14 @@ public class game extends AppCompatActivity {
 
         Spaceship spaceship = new Spaceship(spaceshipX,spaceshipY);
         setSpaceshipLocation(spaceship.getX(), spaceship.getY());
+        gameLayout = findViewById(R.id.game);
         setGoal(maxX/2, 200);
         handler.postDelayed(rotate,100);
         setGameClick();
     }
 
     private void setGameClick() {
-        ConstraintLayout gameLayout = findViewById(R.id.game);
+
         gameLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -91,8 +97,6 @@ public class game extends AppCompatActivity {
 //                newX = spaceship.getVelocity() * sin(spaceship.getAngle());
 //                newY = spaceship.getVelocity() * cos(spaceship.getAngle());
 //                handler.post(thrust);
-                setSpaceshipRotation(10);
-                Log.i("Rotation", "" + spaceship.getAngle());
             }
         });
     }
