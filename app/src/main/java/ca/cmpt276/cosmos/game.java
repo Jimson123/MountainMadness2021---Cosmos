@@ -34,27 +34,13 @@ public class game extends AppCompatActivity {
     private final Runnable thrust = new Runnable() {
         @Override
         public void run() {
-//            double x = spaceship.getX();
-//            double y = spaceship.getY();
-//            if (x < newX){
-//                x += 10;
-//                spaceship.setX(x);
-//            }
-//            if (y < newY){
-//                y += 10;
-//                spaceship.setY(y);
-//            }
-//        }
-            Log.i("thrust", "moving");
+            //Log.i("thrust", "moving");
             if (gameLayout.isPressed()) {
-                Log.i("is pressed:", "true");
-                long timepassed = System.currentTimeMillis() - currentTime;
-                step(timepassed);
-                Log.i("time: ", "" + timepassed);
-                handler.postDelayed(thrust, 100);
-            }
-            else{
-                Log.i("is pressed:", "false");
+                //Log.i("is pressed:", "true");
+                //long timepassed = System.currentTimeMillis() - currentTime;
+                step(10);
+                //Log.i("time: ", "" + timepassed);
+                handler.postDelayed(thrust, 10);
             }
         }
     };
@@ -64,8 +50,8 @@ public class game extends AppCompatActivity {
         public void run() {
             if (!gameLayout.isPressed()){
                 setSpaceshipRotation(r);
-                handler.postDelayed(rotate,100);
             }
+            handler.postDelayed(rotate,100);
         }
     };
 
@@ -110,8 +96,6 @@ public class game extends AppCompatActivity {
             @Override
             public boolean onLongClick(View v) {
 
-//                newX = spaceship.getVelocity() * sin(spaceship.getAngle());
-//                newY = spaceship.getVelocity() * cos(spaceship.getAngle());
                 currentTime = System.currentTimeMillis();
                 handler.post(thrust);
 
@@ -124,6 +108,8 @@ public class game extends AppCompatActivity {
         ImageView spaceshipIcon = findViewById(R.id.spaceship);
         spaceshipIcon.setX((float) x);
         spaceshipIcon.setY((float) y);
+        spaceship.setX(x);
+        spaceship.setY(y);
     }
 
     private void setGoal(double x, double y){
@@ -152,7 +138,7 @@ public class game extends AppCompatActivity {
         double y = spaceship.getY();
         double r = spaceship.getAngle();
         spaceship.setSpaceshipVelX(spaceship.getSpaceshipForwardVel() * Math.sin(Math.toRadians(r)));
-        spaceship.setSpaceshipVelY(spaceship.getSpaceshipForwardVel() * -1 *Math.cos(Math.toRadians(r)));
+        spaceship.setSpaceshipVelY(spaceship.getSpaceshipForwardVel() * -1 * Math.cos(Math.toRadians(r)));
         double newX = x + (spaceship.getSpaceshipVelX() * stepTime/10);
         double newY = y + (spaceship.getSpaceshipVelY() * stepTime/10);
         setSpaceshipLocation((int) newX, (int) newY);
