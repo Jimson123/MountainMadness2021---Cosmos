@@ -19,9 +19,31 @@
 
     <ImageView
         android:id="@+id/goal"
-        android:layout_width="166dp"
-        android:layout_height="102dp"
-        app:srcCompat="@drawable/moon"
-        tools:layout_editor_absoluteX="174dp"
-        tools:layout_editor_absoluteY="40dp" />
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginStart="200dp"
+        android:layout_marginTop="50dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/moon" />
+
+    <ImageView
+        android:id="@+id/asteroid"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="75dp"
+        android:layout_marginTop="275dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/asteroid" />
+
+    <ImageView
+        android:id="@+id/satellite"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="275dp"
+        android:layout_marginTop="425dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/satellite" />
 </androidx.constraintlayout.widget.ConstraintLayout>
