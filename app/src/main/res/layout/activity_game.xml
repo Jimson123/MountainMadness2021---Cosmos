@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/game"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".game">
@@ -12,5 +13,14 @@
         android:layout_height="300px"
         app:srcCompat="@drawable/rocket"
         tools:layout_editor_absoluteX="120dp"
-        tools:layout_editor_absoluteY="625dp" />
+        tools:layout_editor_absoluteY="625dp"
+        tools:ignore="MissingConstraints" />
+
+    <ImageView
+        android:id="@+id/goal"
+        android:layout_width="166dp"
+        android:layout_height="102dp"
+        app:srcCompat="@drawable/moon"
+        tools:layout_editor_absoluteX="174dp"
+        tools:layout_editor_absoluteY="40dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>

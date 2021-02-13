@@ -1,47 +1,47 @@
 package ca.cmpt276.cosmos.models;
 
 public class Spaceship {
-    private int x;
-    private int y;
-    private int angle;
-    private int velocity;
+    private double x;
+    private double y;
+    private double angle;
+    private double velocity;
 
-    public Spaceship(int x, int y) {
+    public Spaceship(double x, double y) {
         this.x = x;
         this.y = y;
         this.angle = 0;
-        this.velocity = 0;
+        this.velocity = 10;
     }
 
-    public int getX() {
+    public double getX() {
         return x;
     }
 
-    public void setX(int x) {
+    public void setX(double x) {
         this.x = x;
     }
 
-    public int getY() {
+    public double getY() {
         return y;
     }
 
-    public void setY(int y) {
+    public void setY(double y) {
         this.y = y;
     }
 
-    public int getAngle() {
+    public double getAngle() {
         return angle;
     }
 
-    public void setAngle(int angle) {
+    public void setAngle(double angle) {
         this.angle = angle;
     }
 
-    public int getVelocity() {
+    public double getVelocity() {
         return velocity;
     }
 
-    public void setVelocity(int velocity) {
+    public void setVelocity(double velocity) {
         this.velocity = velocity;
     }
 }
