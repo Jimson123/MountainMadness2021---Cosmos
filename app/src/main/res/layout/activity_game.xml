@@ -9,13 +9,13 @@
 
     <ImageView
         android:id="@+id/spaceship"
-        android:layout_width="100px"
-        android:layout_height="300px"
+        android:layout_width="40dp"
+        android:layout_height="70dp"
         android:rotation="0"
         app:srcCompat="@drawable/rocket"
+        tools:ignore="MissingConstraints"
         tools:layout_editor_absoluteX="120dp"
-        tools:layout_editor_absoluteY="625dp"
-        tools:ignore="MissingConstraints" />
+        tools:layout_editor_absoluteY="625dp" />
 
     <ImageView
         android:id="@+id/goal"
@@ -28,19 +28,15 @@
         android:id="@+id/asteroid"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:layout_marginStart="75dp"
-        android:layout_marginTop="275dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/asteroid" />
+        app:srcCompat="@drawable/asteroid"
+        tools:layout_editor_absoluteX="75dp"
+        tools:layout_editor_absoluteY="275dp" />
 
     <ImageView
         android:id="@+id/satellite"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:layout_marginStart="275dp"
-        android:layout_marginTop="425dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/satellite" />
+        app:srcCompat="@drawable/satellite"
+        tools:layout_editor_absoluteX="275dp"
+        tools:layout_editor_absoluteY="425dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>

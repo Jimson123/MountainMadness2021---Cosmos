@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.SystemClock;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
@@ -65,6 +66,14 @@ public class game extends AppCompatActivity {
                 setSpaceshipRotation(r);
                 handler.postDelayed(rotate,100);
             }
+        }
+    };
+
+    private final Runnable handleObstacles = new Runnable() {
+        @Override
+        public void run() {
+            handleObstaclePositions();
+            handler.postDelayed(handleObstacles,30);
         }
     };
 
@@ -127,6 +136,15 @@ public class game extends AppCompatActivity {
         ImageView spaceshipIcon = findViewById(R.id.spaceship);
         spaceship.updateAngle(r);
         spaceshipIcon.setRotation((float) spaceship.getAngle());
+    }
+
+    private void handleObstaclePositions() {
+        ImageView asteroidIcon = findViewById(R.id.asteroid);
+        ImageView satelliteIcon = findViewById(R.id.satellite);
+        asteroidIcon.setX((float) (50 + 250 * Math.sin(Math.toRadians(360 * (currentTime % 12000)))));
+        asteroidIcon.setY(275);
+        satelliteIcon.setX((float) (50 + 250 * Math.sin(Math.toRadians(360 * (currentTime % 7000)))));
+        satelliteIcon.setY(425);
     }
 
     private void step(long stepTime) {
