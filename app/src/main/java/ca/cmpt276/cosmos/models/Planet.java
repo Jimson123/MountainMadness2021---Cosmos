@@ -1,12 +1,12 @@
 package ca.cmpt276.cosmos.models;
 
-public class planet {
+public class Planet {
     private double x;
     private double y;
     private double mass;
     private double radius;
 
-    public planet(double x, double y, double mass, double radius) {
+    public Planet(double x, double y, double mass, double radius) {
         this.x = x;
         this.y = y;
         this.mass = mass;

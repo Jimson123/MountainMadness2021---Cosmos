@@ -69,7 +69,7 @@ public class Spaceship {
         this.angle += r;
     }
 
-    public void incrementForwardVelocity(int increment) {
+    public void incrementForwardVelocity(double increment) {
         this.spaceshipForwardVel = spaceshipForwardVel + increment;
     }
 }

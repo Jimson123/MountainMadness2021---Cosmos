@@ -8,16 +8,6 @@
     tools:context=".game">
 
     <ImageView
-        android:id="@+id/spaceship"
-        android:layout_width="40dp"
-        android:layout_height="70dp"
-        android:rotation="0"
-        app:srcCompat="@drawable/rocket"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="120dp"
-        tools:layout_editor_absoluteY="625dp" />
-
-    <ImageView
         android:id="@+id/goal"
         android:layout_width="100dp"
         android:layout_height="100dp"
@@ -52,4 +42,14 @@
         app:srcCompat="@drawable/sun"
         tools:layout_editor_absoluteX="239dp"
         tools:layout_editor_absoluteY="206dp" />
+
+    <ImageView
+        android:id="@+id/spaceship"
+        android:layout_width="40dp"
+        android:layout_height="70dp"
+        android:rotation="0"
+        app:srcCompat="@drawable/rocket"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="120dp"
+        tools:layout_editor_absoluteY="625dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -13,6 +13,10 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import ca.cmpt276.cosmos.models.Planet;
 import ca.cmpt276.cosmos.models.Spaceship;
 
 public class game extends AppCompatActivity {
@@ -22,10 +26,7 @@ public class game extends AppCompatActivity {
     private final Handler handler = new Handler();
     private final Handler obstacleHandler = new Handler();
     private int r = 1;
-    private long currentTime;
-    private double newX;
-    private double newY;
-    private boolean touching;
+    private List<Planet> planetList = new ArrayList<>();
 
     public static Intent launchIntent(Context context) {
         Intent intent = new Intent(context, game.class);
@@ -35,20 +36,16 @@ public class game extends AppCompatActivity {
     private final Runnable thrust = new Runnable() {
         @Override
         public void run() {
-            //Log.i("thrust", "moving");
             if (gameLayout.isPressed()) {
-                //Log.i("is pressed:", "true");
-                //long timepassed = System.currentTimeMillis() - currentTime;
                 step(10);
-                //Log.i("time: ", "" + timepassed);
-                spaceship.incrementForwardVelocity(1);
+                spaceship.incrementForwardVelocity(0.1);
                 handler.postDelayed(thrust, 10);
             }
             else if (spaceship.getSpaceshipForwardVel() > 0){
-                spaceship.incrementForwardVelocity(-1);
+                step(10);
+                spaceship.incrementForwardVelocity(-0.1);
                 handler.postDelayed(thrust, 10);
             }
-
         }
     };
 
@@ -92,9 +89,11 @@ public class game extends AppCompatActivity {
         Spaceship spaceship = new Spaceship(spaceshipX,spaceshipY);
         setSpaceshipLocation(spaceship.getX(), spaceship.getY());
         gameLayout = findViewById(R.id.game);
-        setGoal(maxX/2, 200);
+        //setGoal(maxX/2, 200);
         handler.postDelayed(rotate,100);
-        obstacleHandler.post(handleObstacles);
+        //obstacleHandler.post(handleObstacles);
+        planetList.add(new Planet(400,499, 12,50));
+        setupPlanet(planetList.get(0).getX(), planetList.get(0).getY());
         setGameClick();
     }
 
@@ -104,10 +103,9 @@ public class game extends AppCompatActivity {
             @Override
             public boolean onLongClick(View v) {
 
-                currentTime = System.currentTimeMillis();
                 handler.post(thrust);
-
                 return false;
+
             }
         });
     }
@@ -124,6 +122,12 @@ public class game extends AppCompatActivity {
         ImageView goal = findViewById(R.id.goal);
         goal.setX((float) x);
         goal.setY((float) y);
+    }
+
+    private void setupPlanet(double x, double y){
+        ImageView planet = findViewById(R.id.planet);
+        planet.setX((float) x);
+        planet.setY((float) y);
     }
 
     private void setSpaceshipRotation(int r) {
@@ -152,6 +156,15 @@ public class game extends AppCompatActivity {
         setSpaceshipLocation((int) newX, (int) newY);
         //double newR = Math.atan2(newY, newX) + 1.570796327;
         //setSpaceshipRotation((int) newR);
+    }
+
+    private boolean inGravity(){
+        for (Planet p: planetList){
+            double maxX = p.getX() + p.getRadius();
+            double minX = p.getX() - p.getRadius();
+
+            if ()
+        }
     }
 
 }
