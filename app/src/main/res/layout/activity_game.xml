@@ -21,11 +21,8 @@
         android:id="@+id/goal"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:layout_marginStart="200dp"
-        android:layout_marginTop="50dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/moon" />
+        app:srcCompat="@drawable/moon"
+        tools:layout_editor_absoluteY="50dp" />
 
     <ImageView
         android:id="@+id/asteroid"
