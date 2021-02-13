@@ -20,6 +20,7 @@ public class game extends AppCompatActivity {
     private Spaceship spaceship;
     private ConstraintLayout gameLayout;
     private final Handler handler = new Handler();
+    private final Handler obstacleHandler = new Handler();
     private int r = 1;
     private long currentTime;
     private double newX;
@@ -65,7 +66,7 @@ public class game extends AppCompatActivity {
         @Override
         public void run() {
             handleObstaclePositions();
-            handler.postDelayed(handleObstacles,30);
+            obstacleHandler.postDelayed(handleObstacles,30);
         }
     };
 
@@ -93,6 +94,7 @@ public class game extends AppCompatActivity {
         gameLayout = findViewById(R.id.game);
         setGoal(maxX/2, 200);
         handler.postDelayed(rotate,100);
+        obstacleHandler.post(handleObstacles);
         setGameClick();
     }
 
@@ -133,9 +135,9 @@ public class game extends AppCompatActivity {
     private void handleObstaclePositions() {
         ImageView asteroidIcon = findViewById(R.id.asteroid);
         ImageView satelliteIcon = findViewById(R.id.satellite);
-        asteroidIcon.setX((float) (50 + 250 * Math.sin(Math.toRadians(360 * (currentTime % 12000)))));
+        asteroidIcon.setX((float) (150 + 450 * Math.sin(Math.toRadians(1 * (System.currentTimeMillis() % 12000)))));
         asteroidIcon.setY(275);
-        satelliteIcon.setX((float) (50 + 250 * Math.sin(Math.toRadians(360 * (currentTime % 7000)))));
+        satelliteIcon.setX((float) (150 + 450 * Math.sin(Math.toRadians(1 * (System.currentTimeMillis() % 7000)))));
         satelliteIcon.setY(425);
     }
 
