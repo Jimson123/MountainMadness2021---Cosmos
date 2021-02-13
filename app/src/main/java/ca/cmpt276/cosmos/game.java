@@ -5,20 +5,14 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.content.Context;
 import android.content.Intent;
-import android.media.Image;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
-import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.Space;
 
 import ca.cmpt276.cosmos.models.Spaceship;
-
-import static java.lang.Math.cos;
-import static java.lang.Math.sin;
 
 public class game extends AppCompatActivity {
 
@@ -26,6 +20,7 @@ public class game extends AppCompatActivity {
     private ConstraintLayout gameLayout;
     private final Handler handler = new Handler();
     private int r = 1;
+    private long currentTime;
     private double newX;
     private double newY;
     private boolean touching;
@@ -38,15 +33,27 @@ public class game extends AppCompatActivity {
     private final Runnable thrust = new Runnable() {
         @Override
         public void run() {
-            double x = spaceship.getX();
-            double y = spaceship.getY();
-            if (x < newX){
-                x += 10;
-                spaceship.setX(x);
+//            double x = spaceship.getX();
+//            double y = spaceship.getY();
+//            if (x < newX){
+//                x += 10;
+//                spaceship.setX(x);
+//            }
+//            if (y < newY){
+//                y += 10;
+//                spaceship.setY(y);
+//            }
+//        }
+            Log.i("thrust", "moving");
+            if (gameLayout.isPressed()) {
+                Log.i("is pressed:", "true");
+                long timepassed = System.currentTimeMillis() - currentTime;
+                step(timepassed);
+                Log.i("time: ", "" + timepassed);
+                handler.postDelayed(thrust, 100);
             }
-            if (y < newY){
-                y += 10;
-                spaceship.setY(y);
+            else{
+                Log.i("is pressed:", "false");
             }
         }
     };
@@ -56,8 +63,8 @@ public class game extends AppCompatActivity {
         public void run() {
             if (!gameLayout.isPressed()){
                 setSpaceshipRotation(r);
+                handler.postDelayed(rotate,100);
             }
-            handler.postDelayed(rotate,100);
         }
     };
 
@@ -90,13 +97,16 @@ public class game extends AppCompatActivity {
 
     private void setGameClick() {
 
-        gameLayout.setOnClickListener(new View.OnClickListener() {
+        gameLayout.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
-            public void onClick(View v) {
+            public boolean onLongClick(View v) {
 
 //                newX = spaceship.getVelocity() * sin(spaceship.getAngle());
 //                newY = spaceship.getVelocity() * cos(spaceship.getAngle());
-//                handler.post(thrust);
+                currentTime = System.currentTimeMillis();
+                handler.post(thrust);
+
+                return false;
             }
         });
     }
@@ -119,23 +129,17 @@ public class game extends AppCompatActivity {
         spaceshipIcon.setRotation((float) spaceship.getAngle());
     }
 
-    // TODO: consider whether it would be better to use polar coordinates (angle from planet, radius) instead of cartesian coordinates
-    private void step(double stepTime) {
-        ImageView spaceshipIcon = findViewById(R.id.spaceship);
-        double x = spaceshipIcon.getX();
-        double y = spaceshipIcon.getY();
-        double r = spaceshipIcon.getRotation();
+    private void step(long stepTime) {
+        double x = spaceship.getX();
+        double y = spaceship.getY();
+        double r = spaceship.getAngle();
         spaceship.setSpaceshipVelX(spaceship.getSpaceshipForwardVel() * Math.sin(Math.toRadians(r)));
-        spaceship.setSpaceshipVelY(spaceship.getSpaceshipVelY() * Math.cos(Math.toRadians(r)));
-        double newX = x + (spaceship.getSpaceshipVelX() * stepTime);
-        double newY = y + (spaceship.getSpaceshipVelY() * stepTime);
+        spaceship.setSpaceshipVelY(spaceship.getSpaceshipForwardVel() * -1 *Math.cos(Math.toRadians(r)));
+        double newX = x + (spaceship.getSpaceshipVelX() * stepTime/10);
+        double newY = y + (spaceship.getSpaceshipVelY() * stepTime/10);
         setSpaceshipLocation((int) newX, (int) newY);
-        double newR = Math.atan2(newY, newX) + 1.570796327;
-        setSpaceshipRotation((int) newR);
-        // TODO: adjust rotation based on where the planet actually is. the rocket currently only orbits (0, 0)
+        //double newR = Math.atan2(newY, newX) + 1.570796327;
+        //setSpaceshipRotation((int) newR);
     }
-
-
-
 
 }

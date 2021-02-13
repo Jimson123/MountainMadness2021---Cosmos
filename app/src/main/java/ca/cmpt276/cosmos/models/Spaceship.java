@@ -12,7 +12,7 @@ public class Spaceship {
         this.x = x;
         this.y = y;
         this.angle = 0;
-        this.spaceshipForwardVel = 0;
+        this.spaceshipForwardVel = 10;
         this.spaceshipVelX = 0;
         this.spaceshipVelY = 0;
     }
