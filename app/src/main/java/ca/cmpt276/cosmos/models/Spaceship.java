@@ -67,9 +67,19 @@ public class Spaceship {
 
     public void updateAngle(int r) {
         this.angle += r;
+        if (angle > 360){
+            this.angle = 0;
+        }
     }
 
-    public void incrementForwardVelocity(int increment) {
+    public void incrementForwardVelocity(double increment) {
         this.spaceshipForwardVel = spaceshipForwardVel + increment;
+    }
+
+    public void addGravityAttraction(double angle, double gravity){
+        double yGravity = gravity * Math.sin(Math.toRadians(angle));
+        double xGravity = gravity * Math.cos(Math.toRadians(angle));
+        this.spaceshipVelX += xGravity;
+        this.spaceshipVelY += yGravity;
     }
 }

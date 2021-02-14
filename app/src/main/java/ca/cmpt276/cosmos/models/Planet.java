@@ -1,12 +1,14 @@
 package ca.cmpt276.cosmos.models;
 
-public class planet {
+import static java.lang.Math.asin;
+
+public class Planet {
     private double x;
     private double y;
     private double mass;
     private double radius;
 
-    public planet(double x, double y, double mass, double radius) {
+    public Planet(double x, double y, double mass, double radius) {
         this.x = x;
         this.y = y;
         this.mass = mass;
@@ -48,5 +50,13 @@ public class planet {
 
     public void setRadius(double radius) {
         this.radius = radius;
+    }
+
+    public double getAngle(double sX, double sY){
+        if (y-sY >= x-sX){
+            return 0;
+        }
+        double angle = Math.asin((x-sX)/(y-sY));
+        return angle;
     }
 }
