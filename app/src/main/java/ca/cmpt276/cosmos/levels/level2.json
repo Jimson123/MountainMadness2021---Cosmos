@@ -1,0 +1,42 @@
+{
+  "spaceship": {
+    "position": [0.0, 60.0],
+    "rotation": 0,
+    "radius": 5
+  },
+  "planets": {
+
+  },
+  "earth": {
+    "position": [0.0, 0.0],
+    "radius": 100
+  },
+  "satellite1": {
+    "orbitCenter": [0.0, 0.0],
+    "orbitRadius": 100,
+    "orbitPeriod": 20,
+    "orbitEpoch": 0,
+    "radius": 5
+  },
+  "satellite2": {
+    "orbitCenter": [0.0, 0.0],
+    "orbitRadius": 100,
+    "orbitPeriod": 20,
+    "orbitEpoch": 5,
+    "radius": 5
+  },
+  "satellite3": {
+    "orbitCenter": [0.0, 0.0],
+    "orbitRadius": 100,
+    "orbitPeriod": 20,
+    "orbitEpoch": 5,
+    "radius": 5
+  },
+  "satellite4": {
+    "orbitCenter": [0.0, 0.0],
+    "orbitRadius": 100,
+    "orbitPeriod": 20,
+    "orbitEpoch": 5,
+    "radius": 5
+  }
+}

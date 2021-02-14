@@ -3,18 +3,20 @@ package ca.cmpt276.cosmos.models;
 public class Spaceship {
     private double x;
     private double y;
-    private double angle;
-    private double spaceshipForwardVel;
-    private double spaceshipVelX;
-    private double spaceshipVelY;
+    private double rotation;
+    private double radius;
+    private double speed;
+    private double velX;
+    private double velY;
 
-    public Spaceship(double x, double y) {
+    public Spaceship(double x, double y, double rotation, double radius, double speed, double velX, double velY) {
         this.x = x;
         this.y = y;
-        this.angle = 0;
-        this.spaceshipForwardVel = 0;
-        this.spaceshipVelX = 0;
-        this.spaceshipVelY = 0;
+        this.rotation = rotation;
+        this.radius = radius;
+        this.speed = speed;
+        this.velX = velX;
+        this.velY = velY;
     }
 
     public double getX() {
@@ -33,54 +35,60 @@ public class Spaceship {
         this.y = y;
     }
 
-    public double getAngle() {
-        return angle;
+    public double getRotation() {
+        return rotation;
     }
 
-    public void setAngle(double angle) {
-        this.angle = angle;
+    public void setRotation(double rotation) {
+        this.rotation = rotation;
     }
 
-    public double getSpaceshipForwardVel() {
-        return spaceshipForwardVel;
+    public double getRadius() {
+        return radius;
     }
 
-    public void setSpaceshipForwardVel(double spaceshipForwardVel) {
-        this.spaceshipForwardVel = spaceshipForwardVel;
+    public void setRadius(double radius) {
+        this.radius = radius;
     }
 
-    public double getSpaceshipVelX() {
-        return spaceshipVelX;
+    public double getSpeed() {
+        return speed;
     }
 
-    public void setSpaceshipVelX(double spaceshipVelX) {
-        this.spaceshipVelX = spaceshipVelX;
+    public void setSpeed(double speed) { this.speed = speed; }
+
+    public double getVelX() {
+        return velX;
     }
 
-    public double getSpaceshipVelY() {
-        return spaceshipVelY;
+    public void setVelX(double velX) {
+        this.velX = velX;
     }
 
-    public void setSpaceshipVelY(double spaceshipVelY) {
-        this.spaceshipVelY = spaceshipVelY;
+    public double getVelY() {
+        return velY;
     }
 
-    public void updateAngle(int r) {
-        this.angle += r;
-        if (angle > 360){
-            this.angle = 0;
+    public void setVelY(double velY) {
+        this.velY = velY;
+    }
+
+    public void incrementRotation(double increment) {
+        this.rotation += increment;
+        if (rotation >= 360.0) {
+            this.rotation = rotation % 360;
         }
     }
 
-    public void incrementForwardVelocity(double increment) {
-        this.spaceshipForwardVel = spaceshipForwardVel + increment;
+    public void incrementSpeed(double increment) {
+        this.speed = speed + increment;
     }
 
-    public void addGravityAttraction(double angle, double gravity){
+    public void addGravityAttraction(double angle, double gravity) {
         double yGravity = gravity * Math.sin(Math.toRadians(angle));
         double xGravity = gravity * Math.cos(Math.toRadians(angle));
-        this.spaceshipVelX += xGravity;
-        this.spaceshipVelY += yGravity;
+        this.velX += xGravity;
+        this.velY += yGravity;
     }
 
 }

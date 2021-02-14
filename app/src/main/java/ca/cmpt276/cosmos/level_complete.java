@@ -54,9 +54,12 @@ public class level_complete extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent difficultyIntent = getIntent();
-                int difficulty = difficultyIntent.getIntExtra(EXTRA_DIFFICULTY, 0);
-                Intent intent = game.launchIntent(level_complete.this, difficulty + 1);
+                //Intent difficultyIntent = getIntent();
+                //int difficulty = difficultyIntent.getIntExtra(EXTRA_DIFFICULTY, 0);
+                //Intent intent = game.launchIntent(level_complete.this, difficulty + 1);
+                Intent levelIntent = getIntent();
+                int stage = levelIntent.getIntExtra(EXTRA_DIFFICULTY, 1);
+                Intent intent = game.launchIntent(level_complete.this, stage + 1);
                 finish();
                 startActivity(intent);
             }

@@ -1,0 +1,31 @@
+{
+  "spaceship": {
+    "x": -70.0,
+    "y": -20.0,
+    "rotation": 0.0,
+    "radius": 10.0,
+    "speed": 0.0,
+    "velX": 0.0,
+    "velY": 0.0
+  },
+  "asteroids": [
+  ],
+  "planets": [
+    {
+      "name": "moon",
+      "x": 30.0,
+      "y": -200.0,
+      "radius": 20.0,
+      "mass": 0.0,
+      "gravityRadius": 0.0
+    },
+    {
+      "name": "earth",
+      "x": 0.0,
+      "y": 0.0,
+      "radius": 50.0,
+      "mass": 0.0,
+      "gravityRadius": 0.0
+    }
+  ]
+}
