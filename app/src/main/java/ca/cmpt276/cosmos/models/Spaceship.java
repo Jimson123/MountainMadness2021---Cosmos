@@ -82,4 +82,5 @@ public class Spaceship {
         this.spaceshipVelX += xGravity;
         this.spaceshipVelY += yGravity;
     }
+
 }
