@@ -112,9 +112,9 @@ public class game extends AppCompatActivity {
         setSpaceshipLocation(spaceship.getX(), spaceship.getY());
         gameLayout = findViewById(R.id.game);
         setGoal(displayX/2, 200);
-        //setGoal(maxX/2, 200);
+        setGoal(displayX/2, 200);
         handler.postDelayed(rotate,100);
-        //obstacleHandler.post(handleObstacles);
+        obstacleHandler.post(handleObstacles);
         planetList.add(new Planet(400,499, 100,200));
         setupPlanet(planetList.get(0));
         setGameClick();
