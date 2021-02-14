@@ -16,7 +16,7 @@ public class Planet {
     }
 
     public double getGravity(){
-        double force = (9.81*mass*10)/(radius * radius);
+        double force = (9.81*mass*10)/(radius);
         return force;
     }
 
@@ -53,10 +53,11 @@ public class Planet {
     }
 
     public double getAngle(double sX, double sY){
-        if (y-sY >= x-sX){
+        double diff = (x-sX)/(y-sY);
+        if (Math.abs(diff) > 1){
             return 90;
         }
-        double angle = Math.asin((x-sX)/(y-sY)) + 90;
+        double angle = Math.asin(diff) + 90;
         return angle;
     }
 }

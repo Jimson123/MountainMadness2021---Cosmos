@@ -180,7 +180,7 @@ public class game extends AppCompatActivity {
             //Log.i("orig xVel:", "" + spaceship.getSpaceshipVelX());
             //Log.i("orig yVel:", "" + spaceship.getSpaceshipVelY());
             spaceship.addGravityAttraction(angle, gravity);
-            if (!gameLayout.isPressed() && angle > spaceship.getAngle()){
+            if (!gameLayout.isPressed() && angle < spaceship.getAngle()){
                 setSpaceshipRotation(1);
             }
             else if (!gameLayout.isPressed()){
