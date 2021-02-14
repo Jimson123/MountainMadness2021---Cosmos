@@ -270,16 +270,14 @@ public class game extends AppCompatActivity {
         public void run() {
             if (alive) {
                 if (gameLayout.isPressed()) {
-                    spaceship.incrementSpeed(0.2);
+                    spaceship.incrementSpeed(2);
                     step(33);
                     handler.postDelayed(thrust, 33);
-                //}
-                //else if (spaceship.getSpeed() == 0){
-                //    handler.postDelayed(rotate, 33);
-                } else {
+                }
+                else {
                     if (spaceship.getSpeed() > 0) {
                         if (inGravity() == null) {
-                            spaceship.incrementSpeed(-0.2);
+                            spaceship.incrementSpeed(-2);
                         }
                     } else if (spaceship.getSpeed() < 0){
                         spaceship.setSpeed(0);
@@ -289,7 +287,7 @@ public class game extends AppCompatActivity {
                 }
 
             }
-            else{
+            else {
                 handler.postDelayed(thrust, 33);
             }
         }
@@ -299,7 +297,7 @@ public class game extends AppCompatActivity {
         @Override
         public void run() {
             if (!gameLayout.isPressed() && (spaceship.getSpeed() <= 0)){
-                setSpaceshipRotation(spaceship.getRotation() + 2);
+                setSpaceshipRotation(spaceship.getRotation() + 3);
             }
             handler.postDelayed(rotate,33);
         }
@@ -387,6 +385,7 @@ public class game extends AppCompatActivity {
 
         gameLayout = findViewById(R.id.game);
 
+        handler.post(thrust);
         handler.post(rotate);
 
         // TODO: difficulty / levels
@@ -432,7 +431,7 @@ public class game extends AppCompatActivity {
             @Override
             public boolean onLongClick(View v) {
 
-                handler.post(thrust);
+                //handler.post(thrust);
                 return false;
 
             }
@@ -602,10 +601,10 @@ public class game extends AppCompatActivity {
         double x1 = spaceship.getX();
         double y1 = spaceship.getY();
         for (Planet p: planetList){
-            if (distanceBetween(x1, y1, p.getX(), p.getY()) < 2 * p.getRadius()) {
+            if (distanceBetween(x1, y1, p.getX(), p.getY()) < p.getGravityRadius()) {
                 if (strongestP == null) {
                     strongestP = p;
-                } else if (p.getRadius() < strongestP.getRadius()) {
+                } else if (p.getGravityRadius() < strongestP.getGravityRadius()) {
                     strongestP = p;
                 }
             }
