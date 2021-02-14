@@ -470,6 +470,52 @@ public class game extends AppCompatActivity {
         }
     }
 
+    private void setGoal(Planet p){
+        ImageView goal = findViewById(R.id.goal);
+        goal.setX((float) p.getX());
+        goal.setY((float) p.getY());
+        goal.getLayoutParams().height = (int) (2*p.getRadius());
+        goal.getLayoutParams().width = (int) (2*p.getRadius());
+
+    }
+
+    private void setupAsteroid(Asteroid a, int i){
+        ImageView asteroidIcon = null;
+        if (i == 0) {
+            asteroidIcon = findViewById(R.id.asteroid);
+        } else if (i == 1) {
+            asteroidIcon = findViewById(R.id.satellite);
+        }
+        if (asteroidIcon != null) {
+            asteroidIcon.setX((float) (a.getX() - 75));
+            asteroidIcon.setY((float) (a.getY() - 75));
+            asteroidIcon.getLayoutParams().height = 150;
+            asteroidIcon.getLayoutParams().width = 150;
+        }
+    }
+
+    private void setupPlanet(Planet p){
+        ConstraintLayout planetLayout = findViewById(R.id.planetLayout);
+        ImageView planet = findViewById(R.id.planet);
+        ImageView gravity = findViewById(R.id.gravity1);
+
+        gravity.getLayoutParams().height = (int) (4*p.getRadius());
+        gravity.getLayoutParams().width = (int) (4*p.getRadius());
+        planet.getLayoutParams().height = (int) (2*p.getRadius());
+        planet.getLayoutParams().width = (int) (2*p.getRadius());
+        planetLayout.getLayoutParams().height = (int) (4*p.getRadius());
+        planetLayout.getLayoutParams().width = (int) (4*p.getRadius());
+        planetLayout.setX((float) p.getX());
+        planetLayout.setY((float) p.getY());
+
+    }
+
+    private void setSpaceshipRotation(int r) {
+        ImageView spaceshipIcon = findViewById(R.id.spaceship);
+        spaceship.updateAngle(r);
+        spaceshipIcon.setRotation((float) spaceship.getAngle());
+    }
+
     private void handleAsteroidPositions() {
         //TODO: asteroids
         /*
@@ -549,6 +595,7 @@ public class game extends AppCompatActivity {
                     return true;
                 }
             }
+
         }
         return false;
     }
@@ -565,14 +612,14 @@ public class game extends AppCompatActivity {
             double gravity = p.getGravity(spaceship.getX(), spaceship.getY());
             Log.i("Angle", "true " + angle);
             Log.i("Gravity Added", "true " + gravity);
-            Log.i("orig xVel:", "" + spaceship.getVelX());
-            Log.i("orig yVel:", "" + spaceship.getVelY());
+            Log.i("orig xVel:", "" + spaceship.getSpaceshipVelX());
+            Log.i("orig yVel:", "" + spaceship.getSpaceshipVelY());
             spaceship.addGravityAttraction(angle, gravity);
-//            if (!gameLayout.isPressed() && angle < spaceship.getAngle()) {
-//                setSpaceshipRotation(2);
-//            } else if (!gameLayout.isPressed()) {
-//                setSpaceshipRotation(-2);
-//            }
+            if (!gameLayout.isPressed() && angle < spaceship.getAngle()) {
+                setSpaceshipRotation(2);
+            } else if (!gameLayout.isPressed()) {
+                setSpaceshipRotation(-2);
+            }
             //Log.i(" xVel:", "" + spaceship.getSpaceshipVelX());
             //Log.i(" yVel:", "" + spaceship.getSpaceshipVelY());
 //            if (!gameLayout.isPressed() && angle < spaceship.getAngle()){
@@ -581,8 +628,8 @@ public class game extends AppCompatActivity {
 //            else if (!gameLayout.isPressed()){
 //                setSpaceshipRotation(-1);
 //            }
-            Log.i("xVel:", "" + spaceship.getVelX());
-            Log.i("yVel:", "" + spaceship.getVelY());
+            Log.i("xVel:", "" + spaceship.getSpaceshipVelX());
+            Log.i("yVel:", "" + spaceship.getSpaceshipVelY());
             Log.i(" x:", "" + spaceship.getX());
             Log.i(" y:", "" + spaceship.getY());
         }
