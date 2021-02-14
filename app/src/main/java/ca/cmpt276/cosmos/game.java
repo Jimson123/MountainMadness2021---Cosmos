@@ -52,30 +52,39 @@ public class game extends AppCompatActivity {
         @Override
         public void run() {
             if (alive) {
-                //Log.i("thrust", "moving");
                 if (gameLayout.isPressed()) {
-                    //Log.i("is pressed:", "true");
-                    //long timepassed = System.currentTimeMillis() - currentTime;
-                    //step(33);
                     spaceship.incrementForwardVelocity(0.33);
-                    //handler.postDelayed(thrust, 33);
-                } else {
+                    step(33);
+                    handler.postDelayed(thrust, 33);
+                }
+                else if (spaceship.getSpaceshipForwardVel() == 0){
+                    handler.postDelayed(rotate, 33);
+                }
+                else{
                     if (spaceship.getSpaceshipForwardVel() > 0) {
-                        //step(33);
                         if (inGravity() == null) {
                             spaceship.incrementForwardVelocity(-0.33);
                         }
-                        //handler.postDelayed(thrust, 33);
-                    } else {
-                        //handler.postDelayed(rotate, 33);
-                        setSpaceshipRotation(2);
+                    } else if (spaceship.getSpaceshipForwardVel() < 0){
+                        spaceship.setSpaceshipForwardVel(0);
                     }
+                    step(33);
+                    handler.postDelayed(thrust, 33);
                 }
-                step(33);
-                handler.postDelayed(thrust, 33);
+
             }
             else{
                 handler.postDelayed(thrust, 33);
+            }
+        }
+    };
+
+    private final Runnable rotate = new Runnable() {
+        @Override
+        public void run() {
+            if (!gameLayout.isPressed()){
+                setSpaceshipRotation(2);
+                handler.postDelayed(rotate,33);
             }
         }
     };
@@ -91,7 +100,7 @@ public class game extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // I have no idea how this works
+
         requestWindowFeature(Window.FEATURE_NO_TITLE); //will hide the title
         getSupportActionBar().hide(); // hide the title bar
 
@@ -104,25 +113,22 @@ public class game extends AppCompatActivity {
 
         displayX = (int) display.widthPixels;
         displayY = (int) display.heightPixels;
-        ImageView spaceshipIcon = findViewById(R.id.spaceship);
+
         Intent intent = getIntent();
         difficulty = intent.getIntExtra(EXTRA_DIFFICULTY, 0);
-        //Log.i("x", "" + displayX);
-        //Log.i("Y", "" + displayY);
+
         double spaceshipX = displayX/2 - 50;
         double spaceshipY = displayY - 300;
-        //Log.i("spaceship x", ""+ spaceshipX);
-        //Log.i("spaceship Y", ""+ spaceshipY);
-        spaceship = new Spaceship(spaceshipX,spaceshipY);
 
+        spaceship = new Spaceship(spaceshipX,spaceshipY);
         Spaceship spaceship = new Spaceship(spaceshipX,spaceshipY);
+
         goal = new Planet(displayX/2, 200, 100, 100);
         setGoal(goal);
-
         setSpaceshipLocation(spaceship.getX(), spaceship.getY());
         gameLayout = findViewById(R.id.game);
 
-        handler.post(thrust);
+        handler.post(rotate);
 
         if (difficulty > 0) {
             planetList.add(new Planet(400,499, 100,100));
@@ -350,11 +356,11 @@ public class game extends AppCompatActivity {
             Log.i("orig xVel:", "" + spaceship.getSpaceshipVelX());
             Log.i("orig yVel:", "" + spaceship.getSpaceshipVelY());
             spaceship.addGravityAttraction(angle, gravity);
-            if (!gameLayout.isPressed() && angle < spaceship.getAngle()) {
-                setSpaceshipRotation(2);
-            } else if (!gameLayout.isPressed()) {
-                setSpaceshipRotation(-2);
-            }
+//            if (!gameLayout.isPressed() && angle < spaceship.getAngle()) {
+//                setSpaceshipRotation(2);
+//            } else if (!gameLayout.isPressed()) {
+//                setSpaceshipRotation(-2);
+//            }
             //Log.i(" xVel:", "" + spaceship.getSpaceshipVelX());
             //Log.i(" yVel:", "" + spaceship.getSpaceshipVelY());
 //            if (!gameLayout.isPressed() && angle < spaceship.getAngle()){
