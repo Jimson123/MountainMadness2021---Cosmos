@@ -247,8 +247,8 @@ public class game extends AppCompatActivity {
         planet.getLayoutParams().width = (int) (2*p.getRadius());
         planetLayout.getLayoutParams().height = (int) (4*p.getRadius());
         planetLayout.getLayoutParams().width = (int) (4*p.getRadius());
-        planetLayout.setX((float) p.getX());
-        planetLayout.setY((float) p.getY());
+        planetLayout.setX((float) (p.getX() - 0.5*p.getRadius()));
+        planetLayout.setY((float) (p.getY() - 0.5*p.getRadius()));
 
     }
 
@@ -337,6 +337,7 @@ public class game extends AppCompatActivity {
             if (distanceBetween(x1, y1, x2, y2) < p.getRadius()){
                 return true;
             }
+
         }
         return false;
     }
@@ -351,16 +352,16 @@ public class game extends AppCompatActivity {
         if (p != null) {
             double angle = p.getAngle(spaceship.getX(), spaceship.getY());
             double gravity = p.getGravity(spaceship.getX(), spaceship.getY());
-            Log.i("Angle", "true " + angle);
-            Log.i("Gravity Added", "true " + gravity);
-            Log.i("orig xVel:", "" + spaceship.getSpaceshipVelX());
-            Log.i("orig yVel:", "" + spaceship.getSpaceshipVelY());
+//            Log.i("Angle", "true " + angle);
+//            Log.i("Gravity Added", "true " + gravity);
+//            Log.i("orig xVel:", "" + spaceship.getSpaceshipVelX());
+//            Log.i("orig yVel:", "" + spaceship.getSpaceshipVelY());
             spaceship.addGravityAttraction(angle, gravity);
-//            if (!gameLayout.isPressed() && angle < spaceship.getAngle()) {
-//                setSpaceshipRotation(2);
-//            } else if (!gameLayout.isPressed()) {
-//                setSpaceshipRotation(-2);
-//            }
+            if (!gameLayout.isPressed() && angle < spaceship.getAngle()) {
+                setSpaceshipRotation(2);
+            } else if (!gameLayout.isPressed()) {
+                setSpaceshipRotation(-2);
+            }
             //Log.i(" xVel:", "" + spaceship.getSpaceshipVelX());
             //Log.i(" yVel:", "" + spaceship.getSpaceshipVelY());
 //            if (!gameLayout.isPressed() && angle < spaceship.getAngle()){
@@ -369,10 +370,10 @@ public class game extends AppCompatActivity {
 //            else if (!gameLayout.isPressed()){
 //                setSpaceshipRotation(-1);
 //            }
-            Log.i("xVel:", "" + spaceship.getSpaceshipVelX());
-            Log.i("yVel:", "" + spaceship.getSpaceshipVelY());
-            Log.i(" x:", "" + spaceship.getX());
-            Log.i(" y:", "" + spaceship.getY());
+//            Log.i("xVel:", "" + spaceship.getSpaceshipVelX());
+//            Log.i("yVel:", "" + spaceship.getSpaceshipVelY());
+//            Log.i(" x:", "" + spaceship.getX());
+//            Log.i(" y:", "" + spaceship.getY());
         }
         double newX = x + (spaceship.getSpaceshipVelX() * stepTime/10);
         double newY = y + (spaceship.getSpaceshipVelY() * stepTime/10);
