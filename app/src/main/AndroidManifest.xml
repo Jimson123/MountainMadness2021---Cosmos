@@ -9,7 +9,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Cosmos">
-        <activity android:name=".activity_credits"></activity>
+        <activity android:name=".level_complete"></activity>
+        <activity android:name=".activity_credits" />
         <activity android:name=".game" />
         <activity android:name=".MainActivity">
             <intent-filter>

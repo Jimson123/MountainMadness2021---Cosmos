@@ -29,12 +29,9 @@ public class game extends AppCompatActivity {
     private final Handler obstacleHandler = new Handler();
     private int r = 1;
     private List<Planet> planetList = new ArrayList<>();
+    private Planet goal;
     private int displayX = 1080;
     private int displayY = 1920;
-    private long currentTime;
-    private double newX;
-    private double newY;
-    private boolean touching;
 
     public static Intent launchIntent(Context context) {
         Intent intent = new Intent(context, game.class);
@@ -109,10 +106,11 @@ public class game extends AppCompatActivity {
         spaceship = new Spaceship(spaceshipX,spaceshipY);
 
         Spaceship spaceship = new Spaceship(spaceshipX,spaceshipY);
+        goal = new Planet(displayX/2, 200, 100, 200);
         setSpaceshipLocation(spaceship.getX(), spaceship.getY());
         gameLayout = findViewById(R.id.game);
-        setGoal(displayX/2, 200);
-        setGoal(displayX/2, 200);
+        setGoal(goal);
+
         handler.postDelayed(rotate,100);
         obstacleHandler.post(handleObstacles);
         planetList.add(new Planet(400,499, 100,200));
@@ -139,18 +137,42 @@ public class game extends AppCompatActivity {
         spaceshipIcon.setY((float) y);
         spaceship.setX(x);
         spaceship.setY(y);
+
+        reachedGoal();
     }
 
-    private void setGoal(double x, double y){
+    private void reachedGoal() {
+
+        double minX = goal.getX() - goal.getRadius();
+        double maxX = goal.getX() + goal.getRadius();
+        double minY = goal.getY() - goal.getRadius();
+        double maxY = goal.getY() + goal.getRadius();
+
+        if (minX <= spaceship.getX() && spaceship.getX() <= maxX){
+            if (minY <= spaceship.getY() && spaceship.getY() <= maxY){
+                Log.i("Reached Goal", "true");
+                handler.removeCallbacks(thrust);
+                handler.removeCallbacks(rotate);
+                obstacleHandler.removeCallbacks(handleObstacles);
+                Intent intent = level_complete.launchIntent(game.this);
+                finish();
+                startActivity(intent);
+            }
+        }
+    }
+
+    private void setGoal(Planet p){
         ImageView goal = findViewById(R.id.goal);
-        goal.setX((float) x);
-        goal.setY((float) y);
+        goal.setX((float) p.getX());
+        goal.setY((float) p.getY());
+        goal.getLayoutParams().height = (int) (2*p.getRadius());
+        goal.getLayoutParams().width = (int) (2*p.getRadius());
     }
 
     private void setupPlanet(Planet p){
         ImageView planet = findViewById(R.id.planet);
-        planet.setX((float) (p.getX() - p.getRadius()));
-        planet.setY((float) (p.getY() - p.getRadius()));
+        planet.setX((float) (p.getX() ));
+        planet.setY((float) (p.getY() ));
         planet.getLayoutParams().height = (int) (2*p.getRadius());
         planet.getLayoutParams().width = (int) (2*p.getRadius());
     }
