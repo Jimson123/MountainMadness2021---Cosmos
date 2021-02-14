@@ -5,14 +5,16 @@
     android:id="@+id/game"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".game">
+    tools:context=".game"
+    tools:ignore="ExtraText">
 
     <ImageView
         android:id="@+id/goal"
         android:layout_width="100dp"
         android:layout_height="100dp"
         app:srcCompat="@drawable/moon"
-        tools:layout_editor_absoluteY="50dp" />
+        tools:layout_editor_absoluteY="50dp"
+        tools:ignore="MissingConstraints" />
 
     <ImageView
         android:id="@+id/asteroid"
@@ -20,7 +22,8 @@
         android:layout_height="60dp"
         app:srcCompat="@drawable/asteroid"
         tools:layout_editor_absoluteX="75dp"
-        tools:layout_editor_absoluteY="275dp" />
+        tools:layout_editor_absoluteY="275dp"
+        tools:ignore="MissingConstraints" />
 
     <ImageView
         android:id="@+id/satellite"
@@ -28,20 +31,18 @@
         android:layout_height="60dp"
         app:srcCompat="@drawable/satellite"
         tools:layout_editor_absoluteX="275dp"
-        tools:layout_editor_absoluteY="425dp" />
-        android:layout_marginStart="275dp"
-        android:layout_marginTop="425dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/satellite" />
+        tools:layout_editor_absoluteY="425dp"
+        tools:ignore="MissingConstraints" />
 
     <ImageView
         android:id="@+id/planet"
-        android:layout_width="156dp"
-        android:layout_height="129dp"
+        android:layout_width="10px"
+        android:layout_height="400px"
         app:srcCompat="@drawable/sun"
-        tools:layout_editor_absoluteX="239dp"
-        tools:layout_editor_absoluteY="206dp" />
+        android:foregroundGravity="center"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="-2dp"
+        tools:ignore="MissingConstraints" />
 
     <ImageView
         android:id="@+id/spaceship"

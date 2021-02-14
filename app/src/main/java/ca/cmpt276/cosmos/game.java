@@ -52,8 +52,13 @@ public class game extends AppCompatActivity {
             }
             else if (spaceship.getSpaceshipForwardVel() > 0){
                 step(10);
-                spaceship.incrementForwardVelocity(-0.1);
+                if (inGravity() == null) {
+                    spaceship.incrementForwardVelocity(-0.1);
+                }
                 handler.postDelayed(thrust, 10);
+            }
+            else{
+                handler.postDelayed(rotate, 10);
             }
 
         }
@@ -64,7 +69,7 @@ public class game extends AppCompatActivity {
         public void run() {
             if (!gameLayout.isPressed()){
                 setSpaceshipRotation(r);
-                handler.postDelayed(rotate,100);
+                handler.postDelayed(rotate,10);
             }
         }
     };
@@ -103,8 +108,8 @@ public class game extends AppCompatActivity {
         //setGoal(maxX/2, 200);
         handler.postDelayed(rotate,100);
         //obstacleHandler.post(handleObstacles);
-        planetList.add(new Planet(400,499, 12,50));
-        setupPlanet(planetList.get(0).getX(), planetList.get(0).getY());
+        planetList.add(new Planet(400,499, 100,200));
+        setupPlanet(planetList.get(0));
         setGameClick();
     }
 
@@ -135,10 +140,12 @@ public class game extends AppCompatActivity {
         goal.setY((float) y);
     }
 
-    private void setupPlanet(double x, double y){
+    private void setupPlanet(Planet p){
         ImageView planet = findViewById(R.id.planet);
-        planet.setX((float) x);
-        planet.setY((float) y);
+        planet.setX((float) (p.getX() - p.getRadius()));
+        planet.setY((float) (p.getY() - p.getRadius()));
+        planet.getLayoutParams().height = (int) (2*p.getRadius());
+        planet.getLayoutParams().width = (int) (2*p.getRadius());
     }
 
     private void setSpaceshipRotation(int r) {
@@ -164,6 +171,26 @@ public class game extends AppCompatActivity {
         double r = spaceship.getAngle();
         spaceship.setSpaceshipVelX(spaceship.getSpaceshipForwardVel() * Math.sin(Math.toRadians(r)));
         spaceship.setSpaceshipVelY(spaceship.getSpaceshipForwardVel() * -1 * Math.cos(Math.toRadians(r)));
+        Planet p = inGravity();
+        if (p != null){
+            double angle = p.getAngle(spaceship.getX(), spaceship.getY());
+            double gravity = p.getGravity();
+            Log.i("Angle", "true " + angle);
+            Log.i("Gravity Added", "true " + gravity);
+            //Log.i("orig xVel:", "" + spaceship.getSpaceshipVelX());
+            //Log.i("orig yVel:", "" + spaceship.getSpaceshipVelY());
+            spaceship.addGravityAttraction(angle, gravity);
+            if (!gameLayout.isPressed() && angle > spaceship.getAngle()){
+                setSpaceshipRotation(1);
+            }
+            else if (!gameLayout.isPressed()){
+                setSpaceshipRotation(-1);
+            }
+            //Log.i(" xVel:", "" + spaceship.getSpaceshipVelX());
+            //Log.i(" yVel:", "" + spaceship.getSpaceshipVelY());
+            Log.i(" x:", "" + spaceship.getX());
+            Log.i(" y:", "" + spaceship.getY());
+        }
         double newX = x + (spaceship.getSpaceshipVelX() * stepTime/10);
         double newY = y + (spaceship.getSpaceshipVelY() * stepTime/10);
         setSpaceshipLocation((int) newX, (int) newY);
@@ -171,13 +198,19 @@ public class game extends AppCompatActivity {
         //setSpaceshipRotation((int) newR);
     }
 
-    private boolean inGravity(){
+    private Planet inGravity(){
         for (Planet p: planetList){
             double maxX = p.getX() + p.getRadius();
             double minX = p.getX() - p.getRadius();
-
-            if ()
+            double maxY = p.getY() + p.getRadius();
+            double minY = p.getY() - p.getRadius();
+            if (minX <= spaceship.getX() && spaceship.getX() <= maxX){
+                if (minY <= spaceship.getY() && spaceship.getY() <= maxY){
+                    return p;
+                }
+            }
         }
+        return null;
     }
 
 }
