@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,16 +31,14 @@ public class game extends AppCompatActivity {
     private List<Planet> planetList = new ArrayList<>();
     private ConstraintLayout gameLayout;
     private final Handler handler = new Handler();
-    private final Handler obstacleHandler = new Handler();
     private int r = 1;
     private int touchCounter = 0;
-    private List<Planet> planetList = new ArrayList<>();
     private Planet goal;
     private final Handler asteroidHandler = new Handler();
     private final Handler explodeHandler = new Handler();
     //private int r = 1;
-    private int displayX = 1080;
-    private int displayY = 1920;
+    private int displayX;
+    private int displayY;
     //private long currentTime;
     //private boolean touching;
     private boolean alive = true;
@@ -73,22 +72,13 @@ public class game extends AppCompatActivity {
                     }
                 }
                 step(33);
+                handler.postDelayed(thrust, 33);
             }
-            handler.postDelayed(thrust, 33);
-        }
-    };
-
-    /*
-    private final Runnable rotate = new Runnable() {
-        @Override
-        public void run() {
-            if (!gameLayout.isPressed()){
-                setSpaceshipRotation(r);
-                handler.postDelayed(rotate,10);
+            else{
+                handler.postDelayed(thrust, 33);
             }
         }
     };
-    */
 
     private final Runnable handleAsteroids = new Runnable() {
         @Override
@@ -104,6 +94,7 @@ public class game extends AppCompatActivity {
         // I have no idea how this works
         requestWindowFeature(Window.FEATURE_NO_TITLE); //will hide the title
         getSupportActionBar().hide(); // hide the title bar
+
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN); //enable full screen
         setContentView(R.layout.activity_game);
@@ -114,19 +105,19 @@ public class game extends AppCompatActivity {
         displayX = (int) display.widthPixels;
         displayY = (int) display.heightPixels;
         ImageView spaceshipIcon = findViewById(R.id.spaceship);
-        Log.i("x", "" + displayX);
-        Log.i("Y", "" + displayY);
+        //Log.i("x", "" + displayX);
+        //Log.i("Y", "" + displayY);
         double spaceshipX = displayX/2 - 50;
         double spaceshipY = displayY - 300;
-        Log.i("spaceship x", ""+ spaceshipX);
-        Log.i("spaceship Y", ""+ spaceshipY);
+        //Log.i("spaceship x", ""+ spaceshipX);
+        //Log.i("spaceship Y", ""+ spaceshipY);
         spaceship = new Spaceship(spaceshipX,spaceshipY);
 
         Spaceship spaceship = new Spaceship(spaceshipX,spaceshipY);
         goal = new Planet(displayX/2, 200, 100, 100);
         setSpaceshipLocation(spaceship.getX(), spaceship.getY());
         gameLayout = findViewById(R.id.game);
-        setGoal((displayX * 0.8) - 100, 75);
+        //setGoal((displayX * 0.8) - 100, 75);
         //handler.postDelayed(rotate,100);
         handler.post(thrust);
         asteroidList.add(new Asteroid(1,1,75));
@@ -137,8 +128,8 @@ public class game extends AppCompatActivity {
         planetList.add(new Planet(300,550, 150,100));
         setGoal(goal);
 
-        handler.postDelayed(rotate,100);
-        obstacleHandler.post(handleObstacles);
+        //handler.postDelayed(rotate,100);
+       // obstacleHandler.post(handleObstacles);
         planetList.add(new Planet(400,499, 100,100));
         setupPlanet(planetList.get(0));
         setGameClick();
@@ -150,7 +141,6 @@ public class game extends AppCompatActivity {
             @Override
             public boolean onLongClick(View v) {
 
-                //handler.post(thrust);
                 touchCounter++;
                 updateScore();
                 handler.post(thrust);
@@ -161,7 +151,8 @@ public class game extends AppCompatActivity {
     }
 
     private void updateScore() {
-
+        TextView score = findViewById(R.id.score);
+        score.setText("Score: "+ touchCounter);
     }
 
     private void setSpaceshipLocation(double x, double y) {
@@ -170,28 +161,24 @@ public class game extends AppCompatActivity {
         spaceshipIcon.setY((float) y);
         spaceship.setX(x);
         spaceship.setY(y);
-
         reachedGoal();
     }
 
     private void reachedGoal() {
 
-        double minX = goal.getX() - goal.getRadius();
-        double maxX = goal.getX() + goal.getRadius();
-        double minY = goal.getY() - goal.getRadius();
-        double maxY = goal.getY() + goal.getRadius();
-
-        if (minX <= spaceship.getX() && spaceship.getX() <= maxX){
-            if (minY <= spaceship.getY() && spaceship.getY() <= maxY){
+        if (distanceBetween(spaceship.getX(), spaceship.getY(), goal.getX(),goal.getY()) <= goal.getRadius()){
                 Log.i("Reached Goal", "true");
-                spaceship.setSpaceshipForwardVel(0);
                 handler.removeCallbacks(thrust);
-                handler.removeCallbacks(rotate);
-                obstacleHandler.removeCallbacks(handleObstacles);
-                Intent intent = level_complete.launchIntent(game.this);
+                explodeHandler.removeCallbacks(unExplode);
+                asteroidHandler.removeCallbacks(handleAsteroids);
+                spaceship.setSpaceshipForwardVel(0);
+                alive = false;
+                //handler.removeCallbacks(rotate);
+                //obstacleHandler.removeCallbacks(handleObstacles);
+                Intent intent = level_complete.launchIntent(game.this, touchCounter);
                 finish();
                 startActivity(intent);
-            }
+
         }
     }
 
@@ -226,18 +213,18 @@ public class game extends AppCompatActivity {
 
         planet.getLayoutParams().height = (int) (2*p.getRadius());
         planet.getLayoutParams().width = (int) (2*p.getRadius());
-        planetLayout.getLayoutParams().height = (int) (2.5*p.getRadius());
-        planetLayout.getLayoutParams().width = (int) (2.5*p.getRadius());
-        gravity.getLayoutParams().height = (int) (2.5*p.getRadius());
-        gravity.getLayoutParams().width = (int) (2.5*p.getRadius());
+        planetLayout.getLayoutParams().height = (int) (3*p.getRadius());
+        planetLayout.getLayoutParams().width = (int) (3*p.getRadius());
+        gravity.getLayoutParams().height = (int) (3*p.getRadius());
+        gravity.getLayoutParams().width = (int) (3*p.getRadius());
         planetLayout.setX((float) p.getX());
         planetLayout.setY((float) p.getY());
 
-        ImageView planetIcon = findViewById(R.id.planet);
-        planetIcon.setX((float) (p.getX() - p.getRadius()));
-        planetIcon.setY((float) (p.getY() - p.getRadius()));
-        planetIcon.getLayoutParams().height = (int) (2*p.getRadius());
-        planetIcon.getLayoutParams().width = (int) (2*p.getRadius());
+//        ImageView planetIcon = findViewById(R.id.planet);
+//        planetIcon.setX((float) (p.getX() - p.getRadius()));
+//        planetIcon.setY((float) (p.getY() - p.getRadius()));
+//        planetIcon.getLayoutParams().height = (int) (2*p.getRadius());
+//        planetIcon.getLayoutParams().width = (int) (2*p.getRadius());
     }
 
     private void setSpaceshipRotation(int r) {
@@ -381,11 +368,11 @@ public class game extends AppCompatActivity {
         double x1 = spaceship.getX();
         double y1 = spaceship.getY();
         for (Planet p: planetList){
-            double maxX = p.getX() + 1.25 * p.getRadius();
-            double minX = p.getX() - 1.25 * p.getRadius();
-            double maxY = p.getY() + 1.25 * p.getRadius();
-            double minY = p.getY() - 1.25 * p.getRadius();
-            if (distanceBetween(x1, y1, p.getX(), p.getY()) < 5 * p.getRadius()) {
+//            double maxX = p.getX() + 1.25 * p.getRadius();
+//            double minX = p.getX() - 1.25 * p.getRadius();
+//            double maxY = p.getY() + 1.25 * p.getRadius();
+//            double minY = p.getY() - 1.25 * p.getRadius();
+            if (distanceBetween(x1, y1, p.getX(), p.getY()) < 1.5 * p.getRadius()) {
                 return p;
             }
             /*

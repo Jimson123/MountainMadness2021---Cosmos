@@ -7,13 +7,18 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
+
+import org.w3c.dom.Text;
 
 import java.io.InputStream;
 
 public class level_complete extends AppCompatActivity {
 
-    public static Intent launchIntent(Context context) {
+    private static String EXTRA_SCORE = "extra-score";
+    public static Intent launchIntent(Context context, int score) {
         Intent intent = new Intent(context, level_complete.class);
+        intent.putExtra(EXTRA_SCORE, score);
         return intent;
     }
 
@@ -23,6 +28,13 @@ public class level_complete extends AppCompatActivity {
         setContentView(R.layout.activity_level_complete);
         setupExitButton();
         setupNextLevelButton();
+        setupScore();
+    }
+
+    private void setupScore() {
+        TextView scoretxt = findViewById(R.id.endScore);
+        Intent intent = getIntent();
+        scoretxt.setText("Score: " + intent.getIntExtra(EXTRA_SCORE,0));
     }
 
     private void setupExitButton() {
