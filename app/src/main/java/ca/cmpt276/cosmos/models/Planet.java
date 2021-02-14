@@ -104,8 +104,11 @@ public class Planet {
 //      double angle = Math.atan(diff);
         // Math.atan2 returns the correct angle for all angles from 0 to 360.
         double xdiff = x - sX;
-        double ydiff = y = sY;
-        double angle = Math.atan2(ydiff, xdiff);
+        double ydiff = y - sY;
+        double angle = Math.toDegrees(Math.atan2(ydiff, xdiff));
+        if (angle < 0) {
+            angle = angle + 360;
+        }
         return angle;
     }
 }

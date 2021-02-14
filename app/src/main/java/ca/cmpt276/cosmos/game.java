@@ -38,7 +38,7 @@ import ca.cmpt276.cosmos.models.Spaceship;
 
 public class game extends AppCompatActivity {
 
-    private Spaceship spaceship = new Spaceship(0.0, 0.0, 0.0, 5.0,0.0,0.0,0.0);
+    private Spaceship spaceship = new Spaceship(0.0, 0.0, 0.0, 5.0, 0.0, 0.0, 0.0);
     private Planet goal;
     private List<Asteroid> asteroidList = new ArrayList<>();
     private List<Planet> planetList = new ArrayList<>();
@@ -58,6 +58,7 @@ public class game extends AppCompatActivity {
     //private int difficulty;
     private int stage = 1; // "level" was already used for the Level class
     private static final String EXTRA_DIFFICULTY = "extra-difficulty";
+    private int lastStage = 5;
 
     /*
     public static Intent launchIntent(Context context, int difficulty) {
@@ -100,7 +101,7 @@ public class game extends AppCompatActivity {
         }
         */
         // I can't find the file.
-        levelString = book.getPage(levelNumber - 1); // note that it starts on page 0
+        levelString = book.getPage(Math.min(Math.max(levelNumber - 1, 0), book.pages.length - 1)); // note that it starts on page 0
     }
     Level level = null;
     private void loadLevel(int levelNumber) {
@@ -213,7 +214,7 @@ public class game extends AppCompatActivity {
             //android.content.Context.getPackageName() cannot be used for some reason
             //aId = getResources().getIdentifier(aTemplate.getName(), "id", "ca.cmpt276.cosmos");
             //asteroidIcon = findViewById(aId);
-            aIndex = Integer.parseInt(aTemplate.getName().substring(8)); // get the number in the name
+            aIndex = Integer.parseInt(aTemplate.getName().substring(8)) - 1; // get the number in the name
             asteroidIcon = asteroidIconList.get(aIndex);
             aPixels = camera.positionToPixels(asteroidList.get(i).getX(), asteroidList.get(i).getX(), 2 * aTemplate.getRadius(), 2 * aTemplate.getRadius());
             asteroidIcon.setX(aPixels[0]);
@@ -235,8 +236,8 @@ public class game extends AppCompatActivity {
         int[] pPixels;
         for (int i = 0; i < level.planets.size(); i++) {
             pTemplate = level.planets.get(i);
-            System.out.println(i);
-            System.out.println(pTemplate.getName());
+            //System.out.println(i);
+            //System.out.println(pTemplate.getName());
             planetList.add(new Planet(
                     pTemplate.getName(),
                     pTemplate.getX(),
@@ -296,7 +297,7 @@ public class game extends AppCompatActivity {
     private final Runnable rotate = new Runnable() {
         @Override
         public void run() {
-            if (!gameLayout.isPressed() && (spaceship.getSpeed() <= 0)){
+            if (alive && !gameLayout.isPressed() && (spaceship.getSpeed() <= 0)){
                 setSpaceshipRotation(spaceship.getRotation() + 3);
             }
             handler.postDelayed(rotate,33);
@@ -331,7 +332,8 @@ public class game extends AppCompatActivity {
         Intent intent = getIntent();
         //difficulty = intent.getIntExtra(EXTRA_DIFFICULTY, 0);
         //stage = intent.getIntExtra(EXTRA_DIFFICULTY, 1); // stage keeps getting set to 0
-        stage = 1;
+        stage = Math.min(Math.max(intent.getIntExtra(EXTRA_DIFFICULTY, 1), 1), lastStage);
+        stage = 5; // for testing
 
         //double spaceshipX = displayX/2 - 50;
         //double spaceshipY = displayY - 300;
@@ -388,7 +390,6 @@ public class game extends AppCompatActivity {
         handler.post(thrust);
         handler.post(rotate);
 
-        // TODO: difficulty / levels
         /*
         if (difficulty > 0) {
             planetList.add(new Planet(400,499, 100,100));
@@ -417,7 +418,7 @@ public class game extends AppCompatActivity {
         }
          */
 
-        loadLevel(stage);
+        loadLevel(stage); // this handles all the difficulty in the game
         buildLevel();
 
         asteroidHandler.post(handleAsteroids);
@@ -470,7 +471,6 @@ public class game extends AppCompatActivity {
     }
 
     private void handleAsteroidPositions() {
-        //TODO: asteroids
         /*
         for (int i = 0; i < asteroidList.size(); i++){
             Asteroid a = asteroidList.get(i);
@@ -491,6 +491,23 @@ public class game extends AppCompatActivity {
             asteroidIcon.setY((float) a.getY());
         }
         */
+        double currentTime = System.currentTimeMillis() / 1000.0;
+        Asteroid a;
+        double x;
+        double y;
+        int aIndex;
+        ImageView asteroidIcon;
+        int[] aPixels;
+        for (int i = 0; i < asteroidList.size(); i++) {
+            a = asteroidList.get(i);
+            x = a.getNewX(currentTime);
+            y = a.getNewY(currentTime);
+            aIndex = Integer.parseInt(a.getName().substring(8)) - 1; // get the number in the name
+            asteroidIcon = asteroidIconList.get(aIndex);
+            aPixels = camera.positionToPixels(x, y, 2 * a.getRadius(), 2 * a.getRadius());
+            asteroidIcon.setX(aPixels[0]);
+            asteroidIcon.setY(aPixels[1]);
+        }
     }
 
     private final Runnable unExplode = new Runnable() {
@@ -508,15 +525,17 @@ public class game extends AppCompatActivity {
     };
 
     private void explode() {
-        alive = false;
-        spaceship.setSpeed(0);
-        spaceship.setVelX(0);
-        spaceship.setVelY(0);
-        ImageView spaceshipIcon = findViewById(R.id.spaceship);
-        spaceshipIcon.setImageResource(R.drawable.explosion);
-        MediaPlayer mp = MediaPlayer.create(getApplicationContext(), R.raw.explosion_sound);
-        mp.start();
-        explodeHandler.postDelayed(unExplode,1000);
+        if (alive) {
+            alive = false;
+            spaceship.setSpeed(0);
+            spaceship.setVelX(0);
+            spaceship.setVelY(0);
+            ImageView spaceshipIcon = findViewById(R.id.spaceship);
+            spaceshipIcon.setImageResource(R.drawable.explosion);
+            MediaPlayer mp = MediaPlayer.create(getApplicationContext(), R.raw.explosion_sound);
+            mp.start();
+            explodeHandler.postDelayed(unExplode, 1000);
+        }
     }
 
     private double distanceBetween(double x1, double y1, double x2, double y2) {
@@ -524,6 +543,9 @@ public class game extends AppCompatActivity {
     }
 
     private boolean hitDetect() {
+        if (!alive) {
+            return false;
+        }
         double x1 = spaceship.getX();
         double y1 = spaceship.getY();
         if (x1 < bounds[3] - 10 || x1 > bounds[1] + 10) {
@@ -548,7 +570,6 @@ public class game extends AppCompatActivity {
                     return true;
                 }
             }
-
         }
         return false;
     }
@@ -557,8 +578,6 @@ public class game extends AppCompatActivity {
         double x = spaceship.getX();
         double y = spaceship.getY();
         double r = spaceship.getRotation();
-        spaceship.setVelX(spaceship.getSpeed() * Math.sin(Math.toRadians(r)));
-        spaceship.setVelY(spaceship.getSpeed() * -1 * Math.cos(Math.toRadians(r)));
         Planet p = inGravity();
         if (p != null) {
             double angle = p.getAngle(spaceship.getX(), spaceship.getY());
@@ -568,10 +587,21 @@ public class game extends AppCompatActivity {
             Log.i("orig xVel:", "" + spaceship.getVelX());
             Log.i("orig yVel:", "" + spaceship.getVelY());
             spaceship.addGravityAttraction(angle, gravity);
-            if (!gameLayout.isPressed() && angle < spaceship.getRotation()) {
-                setSpaceshipRotation(2);
+            /*
+            if (!gameLayout.isPressed() && (angle < spaceship.getRotation())) {
+                setSpaceshipRotation(spaceship.getRotation() + 2);
             } else if (!gameLayout.isPressed()) {
-                setSpaceshipRotation(-2);
+                setSpaceshipRotation(spaceship.getRotation() - 2);
+            } else {
+                spaceship.setVelX(spaceship.getSpeed() * Math.sin(Math.toRadians(r)));
+                spaceship.setVelY(spaceship.getSpeed() * -1 * Math.cos(Math.toRadians(r)));
+            }
+             */
+            if (!gameLayout.isPressed()) {
+                setSpaceshipRotation(Math.toDegrees(Math.atan2(spaceship.getVelX(), -1 * spaceship.getVelY())));
+            } else {
+                spaceship.setVelX(spaceship.getSpeed() * Math.sin(Math.toRadians(r)));
+                spaceship.setVelY(spaceship.getSpeed() * -1 * Math.cos(Math.toRadians(r)));
             }
             //Log.i(" xVel:", "" + spaceship.getSpaceshipVelX());
             //Log.i(" yVel:", "" + spaceship.getSpaceshipVelY());
@@ -585,11 +615,13 @@ public class game extends AppCompatActivity {
             Log.i("yVel:", "" + spaceship.getVelY());
             Log.i(" x:", "" + spaceship.getX());
             Log.i(" y:", "" + spaceship.getY());
+        } else {
+            spaceship.setVelX(spaceship.getSpeed() * Math.sin(Math.toRadians(r)));
+            spaceship.setVelY(spaceship.getSpeed() * -1 * Math.cos(Math.toRadians(r)));
         }
         double newX = x + (spaceship.getVelX() * (stepTime / 1000.0));
         double newY = y + (spaceship.getVelY() * (stepTime / 1000.0));
         setSpaceshipLocation(newX, newY);
-
         boolean collision = hitDetect();
         if (collision) {
             explode();
@@ -597,20 +629,23 @@ public class game extends AppCompatActivity {
     }
 
     private Planet inGravity(){
-        Planet strongestP = null; // in overlapping gravity, the smaller one will be used
-        double x1 = spaceship.getX();
-        double y1 = spaceship.getY();
-        for (Planet p: planetList){
-            if (distanceBetween(x1, y1, p.getX(), p.getY()) < p.getGravityRadius()) {
-                if (strongestP == null) {
-                    strongestP = p;
-                } else if (p.getGravityRadius() < strongestP.getGravityRadius()) {
-                    strongestP = p;
+        if (!alive) {
+            return null;
+        } else {
+            Planet strongestP = null; // in overlapping gravity, the smaller one will be used
+            double x1 = spaceship.getX();
+            double y1 = spaceship.getY();
+            for (Planet p : planetList) {
+                if (distanceBetween(x1, y1, p.getX(), p.getY()) < p.getGravityRadius()) {
+                    if (strongestP == null) {
+                        strongestP = p;
+                    } else if (p.getGravityRadius() < strongestP.getGravityRadius()) {
+                        strongestP = p;
+                    }
                 }
+
             }
-
+            return strongestP;
         }
-        return strongestP;
     }
-
 }

@@ -1,0 +1,135 @@
+{
+  "spaceship": {
+    "x": 0.0,
+    "y": -65.0,
+    "rotation": 0.0,
+    "radius": 10.0,
+    "speed": 0.0,
+    "velX": 0.0,
+    "velY": 0.0
+  },
+  "asteroids": [
+    {
+      "name": "asteroid1",
+      "orbit": {
+        "x": 0.0,
+        "y": -250.0,
+        "radius": 60.0,
+        "period": 5.0,
+        "epoch": 0.0
+      },
+      "x": 0.0,
+      "y": 0.0,
+      "radius": 10.0
+    },
+    {
+      "name": "asteroid2",
+      "orbit": {
+        "x": 0.0,
+        "y": -250.0,
+        "radius": 60.0,
+        "period": 5.0,
+        "epoch": 2.5
+      },
+      "x": 0.0,
+      "y": 0.0,
+      "radius": 10.0
+    },
+    {
+      "name": "asteroid3",
+      "orbit": {
+        "x": 0.0,
+        "y": -250.0,
+        "radius": 90.0,
+        "period": 7.5,
+        "epoch": 0.0
+      },
+      "x": 0.0,
+      "y": 0.0,
+      "radius": 10.0
+    },
+    {
+      "name": "asteroid4",
+      "orbit": {
+        "x": 0.0,
+        "y": -250.0,
+        "radius": 90.0,
+        "period": 7.5,
+        "epoch": 3.75
+      },
+      "x": 0.0,
+      "y": 0.0,
+      "radius": 10.0
+    },
+    {
+      "name": "asteroid5",
+      "orbit": {
+        "x": 0.0,
+        "y": -250.0,
+        "radius": 120.0,
+        "period": 10.0,
+        "epoch": 0.0
+      },
+      "x": 0.0,
+      "y": 0.0,
+      "radius": 10.0
+    },
+    {
+      "name": "asteroid6",
+      "orbit": {
+        "x": 0.0,
+        "y": -250.0,
+        "radius": 120.0,
+        "period": 10.0,
+        "epoch": 5.0
+      },
+      "x": 0.0,
+      "y": 0.0,
+      "radius": 10.0
+    },
+    {
+      "name": "asteroid7",
+      "orbit": {
+        "x": 0.0,
+        "y": -250.0,
+        "radius": 150.0,
+        "period": 12.5,
+        "epoch": 0.0
+      },
+      "x": 0.0,
+      "y": 0.0,
+      "radius": 10.0
+    },
+    {
+      "name": "asteroid8",
+      "orbit": {
+        "x": 0.0,
+        "y": -250.0,
+        "radius": 150.0,
+        "period": 12.5,
+        "epoch": 6.25
+      },
+      "x": 0.0,
+      "y": 0.0,
+      "radius": 10.0
+    }
+  ],
+  "planets": [
+    {
+      "name": "moon",
+      "x": 0.0,
+      "y": -250.0,
+      "radius": 20.0,
+      "mass": 0.0,
+      "gravityRadius": 0.0
+    },
+    {
+      "name": "earth",
+      "x": 0.0,
+      "y": 0.0,
+      "radius": 50.0,
+      "mass": 0.0,
+      "gravityRadius": 0.0
+    }
+  ]
+}

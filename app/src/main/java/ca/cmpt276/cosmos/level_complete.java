@@ -2,6 +2,7 @@ package ca.cmpt276.cosmos;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -18,6 +19,8 @@ public class level_complete extends AppCompatActivity {
     private static String EXTRA_SCORE = "extra-score";
     private static String EXTRA_DIFFICULTY = "extra-difficultyNeeded";
 
+    private int lastStage = 5;
+
     public static Intent launchIntent(Context context, int score, int difficulty) {
         Intent intent = new Intent(context, level_complete.class);
         intent.putExtra(EXTRA_SCORE, score);
@@ -25,10 +28,19 @@ public class level_complete extends AppCompatActivity {
         return intent;
     }
 
+    @SuppressLint("SetTextI18n") // I have no idea what this does. Alt + Shift + Enter said it might help
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_level_complete);
+        Intent levelIntent = getIntent();
+        int stage = levelIntent.getIntExtra(EXTRA_DIFFICULTY, 1);
+        TextView completionText = findViewById(R.id.completionText);
+        if (stage < lastStage) {
+            completionText.setText("You completed Level " + stage + ".\nPress the button below to start Level " + (stage + 1) + ".");
+        } else {
+            completionText.setText("You completed Level " + stage + ".\nThank you for playing!");
+        }
         setupExitButton();
         setupNextLevelButton();
         setupScore();

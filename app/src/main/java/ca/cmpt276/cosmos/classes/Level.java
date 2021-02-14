@@ -29,6 +29,7 @@ public class Level {
 
     public void setPlanets(List<Planet> planets) { this.planets = planets; }
 
+    /*
     public double combine(double dimension, double radius) {
         if (dimension < 0) {
             return dimension - radius;
@@ -36,6 +37,7 @@ public class Level {
             return dimension + radius;
         }
     }
+    */
 
     public double[] getBounds() {
         double topBound = -1.0;
@@ -43,48 +45,48 @@ public class Level {
         double bottomBound = 1.0;
         double leftBound = -1.0;
         // handle spaceship
-        if (combine(spaceship.getY(), spaceship.getRadius()) < topBound) {
-            topBound = combine(spaceship.getY(), spaceship.getRadius());
+        if (spaceship.getY() - spaceship.getRadius() < topBound) {
+            topBound = spaceship.getY() - spaceship.getRadius();
         }
-        if (combine(spaceship.getX(), spaceship.getRadius()) > rightBound) {
-            rightBound = combine(spaceship.getX(), spaceship.getRadius());
+        if (spaceship.getX() + spaceship.getRadius() > rightBound) {
+            rightBound = spaceship.getX() + spaceship.getRadius();
         }
-        if (combine(spaceship.getY(), spaceship.getRadius()) > bottomBound) {
-            bottomBound = combine(spaceship.getY(), spaceship.getRadius());
+        if (spaceship.getY() + spaceship.getRadius() > bottomBound) {
+            bottomBound = spaceship.getY() + spaceship.getRadius();
         }
-        if (combine(spaceship.getX(), spaceship.getRadius()) < leftBound) {
-            leftBound = combine(spaceship.getX(), spaceship.getRadius());
+        if (spaceship.getX() - spaceship.getRadius() < leftBound) {
+            leftBound = spaceship.getX() - spaceship.getRadius();
         }
         // handle asteroids
         for (Asteroid a: asteroids) {
             Orbit o = a.getOrbit();
-            if (combine(o.getY() - o.getRadius(), a.getRadius()) < topBound) {
-                topBound = combine(o.getY() - o.getRadius(), a.getRadius());
+            if (o.getY() - o.getRadius() - a.getRadius() < topBound) {
+                topBound = o.getY() - o.getRadius() - a.getRadius();
             }
-            if (combine(o.getX() + o.getRadius(), a.getRadius()) > rightBound) {
-                rightBound = combine(o.getX() + o.getRadius(), a.getRadius());
+            if (o.getX() + o.getRadius() + a.getRadius() > rightBound) {
+                rightBound = o.getX() + o.getRadius() + a.getRadius();
             }
-            if (combine(o.getY() + o.getRadius(), a.getRadius()) > bottomBound) {
-                bottomBound = combine(o.getY() + o.getRadius(), a.getRadius());
+            if (o.getY() + o.getRadius() + a.getRadius() > bottomBound) {
+                bottomBound = o.getY() + o.getRadius() + a.getRadius();
             }
-            if (combine(o.getX() - o.getRadius(), a.getRadius()) < leftBound) {
-                leftBound = combine(o.getX() - o.getRadius(), a.getRadius());
+            if (o.getX() - o.getRadius() - a.getRadius() < leftBound) {
+                leftBound = o.getX() - o.getRadius() - a.getRadius();
             }
         }
         // handle planets
         for (Planet p: planets) {
             double greaterRadius = Math.max(p.getRadius(), p.getGravityRadius());
-            if (combine(p.getY(), greaterRadius) < topBound) {
-                topBound = combine(p.getY(), greaterRadius);
+            if (p.getY() - greaterRadius < topBound) {
+                topBound = p.getY() - greaterRadius;
             }
-            if (combine(p.getX(), greaterRadius) > rightBound) {
-                rightBound = combine(p.getX(), greaterRadius);
+            if (p.getX() + greaterRadius > rightBound) {
+                rightBound = p.getX() + greaterRadius;
             }
-            if (combine(p.getY(), greaterRadius) > bottomBound) {
-                bottomBound = combine(p.getY(), greaterRadius);
+            if (p.getY() + greaterRadius > bottomBound) {
+                bottomBound = p.getY() + greaterRadius;
             }
-            if (combine(p.getX(), greaterRadius) < leftBound) {
-                leftBound = combine(p.getX(), greaterRadius);
+            if (p.getX() - greaterRadius < leftBound) {
+                leftBound = p.getX() - greaterRadius;
             }
         }
         double[] result;

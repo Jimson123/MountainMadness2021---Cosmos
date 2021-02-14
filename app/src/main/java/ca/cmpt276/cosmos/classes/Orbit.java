@@ -62,12 +62,12 @@ public class Orbit {
     }
 
     public double getOrbitX(double currentTime) {
-        double phase = currentTime / epoch;
+        double phase = (currentTime + epoch) / (period / 6.283185307);
         return x + (radius * Math.sin(phase));
     }
 
     public double getOrbitY(double currentTime) {
-        double phase = currentTime / epoch;
-        return x + (radius * -1 * Math.cos(phase));
+        double phase = (currentTime + epoch) / (period / 6.283185307);
+        return y + (radius * -1 * Math.cos(phase));
     }
 }
