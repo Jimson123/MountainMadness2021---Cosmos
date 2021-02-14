@@ -140,12 +140,17 @@ public class game extends AppCompatActivity {
         gameLayout.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-
-                touchCounter++;
-                updateScore();
+                
                 handler.post(thrust);
                 return false;
 
+            }
+        });
+        gameLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                touchCounter++;
+                updateScore();
             }
         });
     }
