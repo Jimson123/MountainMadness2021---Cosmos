@@ -333,7 +333,7 @@ public class game extends AppCompatActivity {
         //difficulty = intent.getIntExtra(EXTRA_DIFFICULTY, 0);
         //stage = intent.getIntExtra(EXTRA_DIFFICULTY, 1); // stage keeps getting set to 0
         stage = Math.min(Math.max(intent.getIntExtra(EXTRA_DIFFICULTY, 1), 1), lastStage);
-        stage = 5; // for testing
+        //stage = 5; // for testing
 
         //double spaceshipX = displayX/2 - 50;
         //double spaceshipY = displayY - 300;
