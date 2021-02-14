@@ -16,9 +16,12 @@ import java.io.InputStream;
 public class level_complete extends AppCompatActivity {
 
     private static String EXTRA_SCORE = "extra-score";
-    public static Intent launchIntent(Context context, int score) {
+    private static String EXTRA_DIFFICULTY = "extra-difficultyNeeded";
+
+    public static Intent launchIntent(Context context, int score, int difficulty) {
         Intent intent = new Intent(context, level_complete.class);
         intent.putExtra(EXTRA_SCORE, score);
+        intent.putExtra(EXTRA_DIFFICULTY, difficulty);
         return intent;
     }
 
@@ -51,7 +54,9 @@ public class level_complete extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = game.launchIntent(level_complete.this);
+                Intent difficultyIntent = getIntent();
+                int difficulty = difficultyIntent.getIntExtra(EXTRA_DIFFICULTY, 0);
+                Intent intent = game.launchIntent(level_complete.this, difficulty + 1);
                 finish();
                 startActivity(intent);
             }

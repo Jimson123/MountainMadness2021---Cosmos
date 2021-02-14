@@ -36,15 +36,15 @@ public class game extends AppCompatActivity {
     private Planet goal;
     private final Handler asteroidHandler = new Handler();
     private final Handler explodeHandler = new Handler();
-    //private int r = 1;
     private int displayX;
     private int displayY;
-    //private long currentTime;
-    //private boolean touching;
     private boolean alive = true;
+    private int difficulty;
+    private static final String EXTRA_DIFFICULTY = "extra-difficulty";
 
-    public static Intent launchIntent(Context context) {
+    public static Intent launchIntent(Context context, int difficulty) {
         Intent intent = new Intent(context, game.class);
+        intent.putExtra(EXTRA_DIFFICULTY, difficulty);
         return intent;
     }
 
@@ -105,6 +105,8 @@ public class game extends AppCompatActivity {
         displayX = (int) display.widthPixels;
         displayY = (int) display.heightPixels;
         ImageView spaceshipIcon = findViewById(R.id.spaceship);
+        Intent intent = getIntent();
+        difficulty = intent.getIntExtra(EXTRA_DIFFICULTY, 0);
         //Log.i("x", "" + displayX);
         //Log.i("Y", "" + displayY);
         double spaceshipX = displayX/2 - 50;
@@ -115,23 +117,40 @@ public class game extends AppCompatActivity {
 
         Spaceship spaceship = new Spaceship(spaceshipX,spaceshipY);
         goal = new Planet(displayX/2, 200, 100, 100);
-        setSpaceshipLocation(spaceship.getX(), spaceship.getY());
-        gameLayout = findViewById(R.id.game);
-        //setGoal((displayX * 0.8) - 100, 75);
-        //handler.postDelayed(rotate,100);
-        handler.post(thrust);
-        asteroidList.add(new Asteroid(1,1,75));
-        asteroidList.add(new Asteroid(2,2,75));
-        setupAsteroid(asteroidList.get(0), 0);
-        setupAsteroid(asteroidList.get(1), 1);
-        asteroidHandler.post(handleAsteroids);
-        planetList.add(new Planet(300,550, 150,100));
         setGoal(goal);
 
-        //handler.postDelayed(rotate,100);
-       // obstacleHandler.post(handleObstacles);
-        planetList.add(new Planet(400,499, 100,100));
-        setupPlanet(planetList.get(0));
+        setSpaceshipLocation(spaceship.getX(), spaceship.getY());
+        gameLayout = findViewById(R.id.game);
+
+        handler.post(thrust);
+
+        if (difficulty > 0) {
+            planetList.add(new Planet(400,499, 100,100));
+            setupPlanet(planetList.get(0));
+        }
+        else{
+            ConstraintLayout planetLayout = findViewById(R.id.planetLayout);
+            planetLayout.setVisibility(View.INVISIBLE);
+        }
+
+        if (difficulty > 1){
+            asteroidList.add(new Asteroid(1,1,75));
+            setupAsteroid(asteroidList.get(0), 0);
+        }
+        else{
+            ImageView asteroid = findViewById(R.id.asteroid);
+            asteroid.setVisibility(View.INVISIBLE);
+        }
+        if (difficulty > 2){
+            asteroidList.add(new Asteroid(2,2,75));
+            setupAsteroid(asteroidList.get(1), 1);
+        }
+        else{
+            ImageView satellite = findViewById(R.id.satellite);
+            satellite.setVisibility(View.INVISIBLE);
+        }
+        asteroidHandler.post(handleAsteroids);
+
         setGameClick();
     }
 
@@ -140,7 +159,7 @@ public class game extends AppCompatActivity {
         gameLayout.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                
+
                 handler.post(thrust);
                 return false;
 
@@ -180,7 +199,7 @@ public class game extends AppCompatActivity {
                 alive = false;
                 //handler.removeCallbacks(rotate);
                 //obstacleHandler.removeCallbacks(handleObstacles);
-                Intent intent = level_complete.launchIntent(game.this, touchCounter);
+                Intent intent = level_complete.launchIntent(game.this, touchCounter, difficulty);
                 finish();
                 startActivity(intent);
 
@@ -216,20 +235,15 @@ public class game extends AppCompatActivity {
         ImageView planet = findViewById(R.id.planet);
         ImageView gravity = findViewById(R.id.gravity1);
 
+        gravity.getLayoutParams().height = (int) (4*p.getRadius());
+        gravity.getLayoutParams().width = (int) (4*p.getRadius());
         planet.getLayoutParams().height = (int) (2*p.getRadius());
         planet.getLayoutParams().width = (int) (2*p.getRadius());
-        planetLayout.getLayoutParams().height = (int) (3*p.getRadius());
-        planetLayout.getLayoutParams().width = (int) (3*p.getRadius());
-        gravity.getLayoutParams().height = (int) (3*p.getRadius());
-        gravity.getLayoutParams().width = (int) (3*p.getRadius());
+        planetLayout.getLayoutParams().height = (int) (4*p.getRadius());
+        planetLayout.getLayoutParams().width = (int) (4*p.getRadius());
         planetLayout.setX((float) p.getX());
         planetLayout.setY((float) p.getY());
 
-//        ImageView planetIcon = findViewById(R.id.planet);
-//        planetIcon.setX((float) (p.getX() - p.getRadius()));
-//        planetIcon.setY((float) (p.getY() - p.getRadius()));
-//        planetIcon.getLayoutParams().height = (int) (2*p.getRadius());
-//        planetIcon.getLayoutParams().width = (int) (2*p.getRadius());
     }
 
     private void setSpaceshipRotation(int r) {
@@ -239,25 +253,21 @@ public class game extends AppCompatActivity {
     }
 
     private void handleAsteroidPositions() {
-        if (asteroidList.size() >= 1){
-            Asteroid a = asteroidList.get(0);
-            double asteroidPhase = Math.toRadians(System.currentTimeMillis() / (3.6 * 6.283185307));
-            a.setX(displayX/2 - 100 + (displayX/3) * Math.sin(asteroidPhase));
-            a.setY(displayY * 0.35);
-            ImageView asteroidIcon = findViewById(R.id.asteroid);
-            asteroidIcon.setX((float) a.getX());
-            asteroidIcon.setY((float) a.getY());
-        }
-        if (asteroidList.size() >= 2){
-            //ImageView satelliteIcon = findViewById(R.id.satellite);
-            //double satellitePhase = Math.toRadians(System.currentTimeMillis() / (2.1 * 6.283185307));
-            //satelliteIcon.setX((float) (displayX/2 - 100 + (displayX/3) * Math.sin(satellitePhase)));
-            //satelliteIcon.setY((float) (displayY * 0.6));
-            Asteroid a = asteroidList.get(1);
-            double asteroidPhase = Math.toRadians(System.currentTimeMillis() / (2.1 * 6.283185307));
-            a.setX(displayX/2 - 100 + (displayX/3) * Math.sin(asteroidPhase));
-            a.setY(displayY * 0.6);
-            ImageView asteroidIcon = findViewById(R.id.satellite);
+        for (int i = 0; i < asteroidList.size(); i++){
+            Asteroid a = asteroidList.get(i);
+            ImageView asteroidIcon = null;
+            if (i == 0){
+                double asteroidPhase = Math.toRadians(System.currentTimeMillis() / (3.6 * 6.283185307));
+                a.setX(displayX/2 - 100 + (displayX/3) * Math.sin(asteroidPhase));
+                a.setY(displayY * 0.35);
+                asteroidIcon = findViewById(R.id.asteroid);
+            }
+            else if (i == 1){
+                double asteroidPhase = Math.toRadians(System.currentTimeMillis() / (2.1 * 6.283185307));
+                a.setX(displayX/2 - 100 + (displayX/3) * Math.sin(asteroidPhase));
+                a.setY(displayY * 0.6);
+                asteroidIcon = findViewById(R.id.satellite);
+            }
             asteroidIcon.setX((float) a.getX());
             asteroidIcon.setY((float) a.getY());
         }
@@ -361,8 +371,7 @@ public class game extends AppCompatActivity {
         double newX = x + (spaceship.getSpaceshipVelX() * stepTime/10);
         double newY = y + (spaceship.getSpaceshipVelY() * stepTime/10);
         setSpaceshipLocation((int) newX, (int) newY);
-        //double newR = Math.atan2(newY, newX) + 1.570796327;
-        //setSpaceshipRotation((int) newR);
+
         boolean collision = hitDetect();
         if (collision) {
             explode();
@@ -373,24 +382,11 @@ public class game extends AppCompatActivity {
         double x1 = spaceship.getX();
         double y1 = spaceship.getY();
         for (Planet p: planetList){
-//            double maxX = p.getX() + 1.25 * p.getRadius();
-//            double minX = p.getX() - 1.25 * p.getRadius();
-//            double maxY = p.getY() + 1.25 * p.getRadius();
-//            double minY = p.getY() - 1.25 * p.getRadius();
-            if (distanceBetween(x1, y1, p.getX(), p.getY()) < 1.5 * p.getRadius()) {
+
+            if (distanceBetween(x1, y1, p.getX(), p.getY()) < 2 * p.getRadius()) {
                 return p;
             }
-            /*
-            double maxX = p.getX() + p.getRadius();
-            double minX = p.getX() - p.getRadius();
-            double maxY = p.getY() + p.getRadius();
-            double minY = p.getY() - p.getRadius();
-            if (minX <= spaceship.getX() && spaceship.getX() <= maxX){
-                if (minY <= spaceship.getY() && spaceship.getY() <= maxY){
-                    return p;
-                }
-            }
-            */
+
         }
         return null;
     }
