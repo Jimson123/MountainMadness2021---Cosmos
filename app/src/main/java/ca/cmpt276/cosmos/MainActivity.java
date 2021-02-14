@@ -14,6 +14,18 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setupStartButton();
+        setupCreditsButton();
+    }
+
+    private void setupCreditsButton() {
+        Button btn = findViewById(R.id.credits);
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = activity_credits.LaunchIntent(MainActivity.this);
+                startActivity(intent);
+            }
+        });
     }
 
     private void setupStartButton() {

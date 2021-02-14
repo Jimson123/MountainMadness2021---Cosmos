@@ -54,9 +54,9 @@ public class Planet {
 
     public double getAngle(double sX, double sY){
         if (y-sY >= x-sX){
-            return 0;
+            return 90;
         }
-        double angle = Math.asin((x-sX)/(y-sY));
+        double angle = Math.asin((x-sX)/(y-sY)) + 90;
         return angle;
     }
 }
