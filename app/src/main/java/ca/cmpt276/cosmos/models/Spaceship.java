@@ -79,7 +79,7 @@ public class Spaceship {
     public void addGravityAttraction(double angle, double gravity){
         double yGravity = gravity * Math.sin(Math.toRadians(angle));
         double xGravity = gravity * Math.cos(Math.toRadians(angle));
-        this.spaceshipVelX += xGravity/100;
-        this.spaceshipVelY += yGravity/100;
+        this.spaceshipVelX += xGravity;
+        this.spaceshipVelY += yGravity;
     }
 }

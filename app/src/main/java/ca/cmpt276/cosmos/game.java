@@ -28,6 +28,7 @@ public class game extends AppCompatActivity {
     private final Handler handler = new Handler();
     private final Handler obstacleHandler = new Handler();
     private int r = 1;
+    private int touchCounter = 0;
     private List<Planet> planetList = new ArrayList<>();
     private Planet goal;
     private int displayX = 1080;
@@ -106,14 +107,14 @@ public class game extends AppCompatActivity {
         spaceship = new Spaceship(spaceshipX,spaceshipY);
 
         Spaceship spaceship = new Spaceship(spaceshipX,spaceshipY);
-        goal = new Planet(displayX/2, 200, 100, 200);
+        goal = new Planet(displayX/2, 200, 100, 100);
         setSpaceshipLocation(spaceship.getX(), spaceship.getY());
         gameLayout = findViewById(R.id.game);
         setGoal(goal);
 
         handler.postDelayed(rotate,100);
         obstacleHandler.post(handleObstacles);
-        planetList.add(new Planet(400,499, 100,200));
+        planetList.add(new Planet(400,499, 100,100));
         setupPlanet(planetList.get(0));
         setGameClick();
     }
@@ -124,11 +125,17 @@ public class game extends AppCompatActivity {
             @Override
             public boolean onLongClick(View v) {
 
+                touchCounter++;
+                updateScore();
                 handler.post(thrust);
                 return false;
 
             }
         });
+    }
+
+    private void updateScore() {
+
     }
 
     private void setSpaceshipLocation(double x, double y) {
@@ -151,6 +158,7 @@ public class game extends AppCompatActivity {
         if (minX <= spaceship.getX() && spaceship.getX() <= maxX){
             if (minY <= spaceship.getY() && spaceship.getY() <= maxY){
                 Log.i("Reached Goal", "true");
+                spaceship.setSpaceshipForwardVel(0);
                 handler.removeCallbacks(thrust);
                 handler.removeCallbacks(rotate);
                 obstacleHandler.removeCallbacks(handleObstacles);
@@ -167,14 +175,23 @@ public class game extends AppCompatActivity {
         goal.setY((float) p.getY());
         goal.getLayoutParams().height = (int) (2*p.getRadius());
         goal.getLayoutParams().width = (int) (2*p.getRadius());
+
     }
 
     private void setupPlanet(Planet p){
+        ConstraintLayout planetLayout = findViewById(R.id.planetLayout);
         ImageView planet = findViewById(R.id.planet);
-        planet.setX((float) (p.getX() ));
-        planet.setY((float) (p.getY() ));
+        ImageView gravity = findViewById(R.id.gravity1);
+
         planet.getLayoutParams().height = (int) (2*p.getRadius());
         planet.getLayoutParams().width = (int) (2*p.getRadius());
+        planetLayout.getLayoutParams().height = (int) (2.5*p.getRadius());
+        planetLayout.getLayoutParams().width = (int) (2.5*p.getRadius());
+        gravity.getLayoutParams().height = (int) (2.5*p.getRadius());
+        gravity.getLayoutParams().width = (int) (2.5*p.getRadius());
+        planetLayout.setX((float) p.getX());
+        planetLayout.setY((float) p.getY());
+
     }
 
     private void setSpaceshipRotation(int r) {
@@ -203,20 +220,20 @@ public class game extends AppCompatActivity {
         Planet p = inGravity();
         if (p != null){
             double angle = p.getAngle(spaceship.getX(), spaceship.getY());
-            double gravity = p.getGravity();
+            double gravity = p.getGravity(spaceship.getX(), spaceship.getY());
             Log.i("Angle", "true " + angle);
             Log.i("Gravity Added", "true " + gravity);
-            //Log.i("orig xVel:", "" + spaceship.getSpaceshipVelX());
-            //Log.i("orig yVel:", "" + spaceship.getSpaceshipVelY());
+            Log.i("orig xVel:", "" + spaceship.getSpaceshipVelX());
+            Log.i("orig yVel:", "" + spaceship.getSpaceshipVelY());
             spaceship.addGravityAttraction(angle, gravity);
-            if (!gameLayout.isPressed() && angle < spaceship.getAngle()){
-                setSpaceshipRotation(1);
-            }
-            else if (!gameLayout.isPressed()){
-                setSpaceshipRotation(-1);
-            }
-            //Log.i(" xVel:", "" + spaceship.getSpaceshipVelX());
-            //Log.i(" yVel:", "" + spaceship.getSpaceshipVelY());
+//            if (!gameLayout.isPressed() && angle < spaceship.getAngle()){
+//                setSpaceshipRotation(1);
+//            }
+//            else if (!gameLayout.isPressed()){
+//                setSpaceshipRotation(-1);
+//            }
+            Log.i("xVel:", "" + spaceship.getSpaceshipVelX());
+            Log.i("yVel:", "" + spaceship.getSpaceshipVelY());
             Log.i(" x:", "" + spaceship.getX());
             Log.i(" y:", "" + spaceship.getY());
         }
@@ -229,10 +246,10 @@ public class game extends AppCompatActivity {
 
     private Planet inGravity(){
         for (Planet p: planetList){
-            double maxX = p.getX() + p.getRadius();
-            double minX = p.getX() - p.getRadius();
-            double maxY = p.getY() + p.getRadius();
-            double minY = p.getY() - p.getRadius();
+            double maxX = p.getX() + 1.25 * p.getRadius();
+            double minX = p.getX() - 1.25 * p.getRadius();
+            double maxY = p.getY() + 1.25 * p.getRadius();
+            double minY = p.getY() - 1.25 * p.getRadius();
             if (minX <= spaceship.getX() && spaceship.getX() <= maxX){
                 if (minY <= spaceship.getY() && spaceship.getY() <= maxY){
                     return p;

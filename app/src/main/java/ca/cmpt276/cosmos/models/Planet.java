@@ -1,6 +1,9 @@
 package ca.cmpt276.cosmos.models;
 
+import ca.cmpt276.cosmos.MainActivity;
+
 import static java.lang.Math.asin;
+import static java.lang.Math.pow;
 
 public class Planet {
     private double x;
@@ -15,8 +18,11 @@ public class Planet {
         this.radius = radius;
     }
 
-    public double getGravity(){
-        double force = (9.81*mass*10)/(radius);
+    public double getGravity(double sX, double sY){
+        double xdiff = x - sX;
+        double ydiff = y - sY;
+        double rad = Math.sqrt(Math.pow(xdiff,2) + Math.pow(ydiff,2));
+        double force = (9.81*mass*10)/pow(rad, 2);
         return force;
     }
 
@@ -54,10 +60,10 @@ public class Planet {
 
     public double getAngle(double sX, double sY){
         double diff = (x-sX)/(y-sY);
-        if (Math.abs(diff) > 1){
-            return 90;
-        }
-        double angle = Math.asin(diff) + 90;
+//        if (Math.abs(diff) > 1){
+//            return 90;
+//        }
+        double angle = Math.atan(diff);
         return angle;
     }
 }

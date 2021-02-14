@@ -6,15 +6,26 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".game"
-    tools:ignore="ExtraText">
+    tools:ignore="ExtraText"
+    android:background="@color/black">
+
+    <ImageView
+        android:id="@+id/earth"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guideline"
+        app:srcCompat="@drawable/earth" />
 
     <ImageView
         android:id="@+id/goal"
         android:layout_width="100dp"
         android:layout_height="100dp"
         app:srcCompat="@drawable/moon"
-        tools:layout_editor_absoluteY="50dp"
-        tools:ignore="MissingConstraints" />
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="235dp"
+        tools:layout_editor_absoluteY="65dp" />
 
     <ImageView
         android:id="@+id/asteroid"
@@ -35,16 +46,6 @@
         tools:ignore="MissingConstraints" />
 
     <ImageView
-        android:id="@+id/planet"
-        android:layout_width="10px"
-        android:layout_height="400px"
-        app:srcCompat="@drawable/sun"
-        android:foregroundGravity="center"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="-2dp"
-        tools:ignore="MissingConstraints" />
-
-    <ImageView
         android:id="@+id/spaceship"
         android:layout_width="40dp"
         android:layout_height="70dp"
@@ -53,4 +54,55 @@
         tools:ignore="MissingConstraints"
         tools:layout_editor_absoluteX="120dp"
         tools:layout_editor_absoluteY="625dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.85" />
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/planetLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:layout_editor_absoluteX="152dp"
+        tools:layout_editor_absoluteY="420dp">
+
+        <ImageView
+            android:id="@+id/planet"
+            android:layout_width="400px"
+            android:layout_height="400px"
+            android:foregroundGravity="center"
+            app:layout_constraintBottom_toBottomOf="@+id/gravity1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/sun" />
+
+        <ImageView
+            android:id="@+id/gravity1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="false"
+            android:foregroundGravity="center"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/gravity" />
+
+        <TextView
+            android:id="@+id/score"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="32dp"
+            android:text="Score: 0"
+            android:textColor="#FFFFFF"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

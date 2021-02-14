@@ -22,6 +22,7 @@ public class level_complete extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_level_complete);
         setupExitButton();
+        setupNextLevelButton();
     }
 
     private void setupExitButton() {
